@@ -1,4 +1,4 @@
-# 🎰 SpadeBet BlackJack
+# 🎰 SpadeBet
 
 A premium iOS Blackjack game built with SwiftUI featuring authentic casino gameplay, in-app purchases, and modern UI design.
 
@@ -49,8 +49,8 @@ A premium iOS Blackjack game built with SwiftUI featuring authentic casino gamep
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/YOUR_USERNAME/SpadeBet-BlackJack.git
-   cd SpadeBet-BlackJack
+   git clone https://github.com/YOUR_USERNAME/SpadeBet.git
+   cd SpadeBet
    ```
 
 2. **Open in Xcode**
@@ -217,7 +217,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 If you encounter any issues or have questions:
 
-1. Check the [Issues](https://github.com/YOUR_USERNAME/SpadeBet-BlackJack/issues) page
+1. Check the [Issues](https://github.com/YOUR_USERNAME/SpadeBet/issues) page
 2. Create a new issue with detailed information
 3. Contact the developer directly
 
@@ -225,4 +225,4 @@ If you encounter any issues or have questions:
 
 **Made with ❤️ using SwiftUI**
 
-*Enjoy playing SpadeBet BlackJack! 🎰*
+*Enjoy playing SpadeBet! 🎰*

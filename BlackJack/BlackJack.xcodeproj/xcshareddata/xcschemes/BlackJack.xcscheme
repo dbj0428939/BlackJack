@@ -16,7 +16,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B7699842DF60F28002E10A3"
-               BuildableName = "SpadeBet BlackJack.app"
+               BuildableName = "SpadeBet.app"
                BlueprintName = "BlackJack"
                ReferencedContainer = "container:BlackJack.xcodeproj">
             </BuildableReference>
@@ -36,7 +36,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B7699912DF60F2A002E10A3"
-               BuildableName = "SpadeBet BlackJack.xctest"
+               BuildableName = "SpadeBet.xctest"
                BlueprintName = "BlackJackTests"
                ReferencedContainer = "container:BlackJack.xcodeproj">
             </BuildableReference>
@@ -47,7 +47,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "3B76999B2DF60F2A002E10A3"
-               BuildableName = "SpadeBet BlackJack.xctest"
+               BuildableName = "SpadeBet.xctest"
                BlueprintName = "BlackJackUITests"
                ReferencedContainer = "container:BlackJack.xcodeproj">
             </BuildableReference>
@@ -69,7 +69,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3B7699842DF60F28002E10A3"
-            BuildableName = "SpadeBet BlackJack.app"
+            BuildableName = "SpadeBet.app"
             BlueprintName = "BlackJack"
             ReferencedContainer = "container:BlackJack.xcodeproj">
          </BuildableReference>
@@ -86,7 +86,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "3B7699842DF60F28002E10A3"
-            BuildableName = "SpadeBet BlackJack.app"
+            BuildableName = "SpadeBet.app"
             BlueprintName = "BlackJack"
             ReferencedContainer = "container:BlackJack.xcodeproj">
          </BuildableReference>
