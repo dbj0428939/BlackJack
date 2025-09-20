@@ -547,19 +547,19 @@ class BlackjackGame: ObservableObject {
         
         if hand.isBust {
             gameStats.recordPlayerBust()
-            return (isActiveHand ? "Dealer Wins" : "", -hand.bet)
+            return (isActiveHand ? "Dealer Wins" : "", 0) // Loss: no payout, bet already deducted
         } else if dealerHand.isBust {
             gameStats.recordPlayerWin()
-            return (isActiveHand ? "You Win" : "", hand.bet * 2)
+            return (isActiveHand ? "You Win" : "", hand.bet * 2) // Win: bet + winnings
         } else if dealerHand.value > hand.value {
             gameStats.recordPlayerLoss()
-            return (isActiveHand ? "Dealer Wins" : "", -hand.bet)
+            return (isActiveHand ? "Dealer Wins" : "", 0) // Loss: no payout, bet already deducted
         } else if dealerHand.value < hand.value {
             gameStats.recordPlayerWin()
-            return (isActiveHand ? "You Win" : "", hand.bet * 2)
+            return (isActiveHand ? "You Win" : "", hand.bet * 2) // Win: bet + winnings
         } else {
             gameStats.recordPush()
-            return (isActiveHand ? "Push!" : "", 0)
+            return (isActiveHand ? "Push!" : "", hand.bet) // Push: return original bet
         }
     }
 

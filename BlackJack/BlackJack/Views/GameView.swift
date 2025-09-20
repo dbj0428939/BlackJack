@@ -3804,19 +3804,19 @@ struct GameView: View {
         
         if hand.isBust {
             result = "Dealer Wins"
-            payout = -hand.bet
+            payout = 0 // Loss: no payout, bet already deducted
         } else if dealerValue > 21 {
             result = "You Win"
-            payout = hand.bet * 2
+            payout = hand.bet * 2 // Win: bet + winnings
         } else if dealerValue > hand.value {
             result = "Dealer Wins"
-            payout = -hand.bet
+            payout = 0 // Loss: no payout, bet already deducted
         } else if dealerValue < hand.value {
             result = "You Win"
-            payout = hand.bet * 2
+            payout = hand.bet * 2 // Win: bet + winnings
         } else {
             result = "Push!"
-            payout = 0
+            payout = hand.bet // Push: return original bet
         }
         
         // Store result for this hand
@@ -3903,20 +3903,42 @@ struct GameView: View {
                     // For split hands, manually update balance
                     print("DEBUG: About to update balance with payout: \(payout), current balance: \(self.gameState.balance)")
                     if payout > 0 {
-                        // Wins: add payout to balance
+                        // Wins: add payout to balance (includes bet + winnings)
                         self.gameState.balance += payout
                     } else if payout == 0 {
-                        // Push: return the original bet to balance
+                        // Check if this is a push (return bet) or loss (no change)
                         let hand = self.game.splitManager.hands[handIndex]
-                        self.gameState.balance += hand.bet
+                        let dealerValue = self.game.dealerHand.value
+                        let handValue = hand.value
+                        
+                        if hand.isBust || dealerValue > handValue {
+                            // Loss: no balance change (bet already deducted)
+                            print("DEBUG: Loss - no balance change")
+                        } else if dealerValue == handValue {
+                            // Push: return the original bet to balance
+                            self.gameState.balance += hand.bet
+                            print("DEBUG: Push - returning bet: \(hand.bet)")
+                        }
                     }
-                    // Losses don't change balance (already deducted when bet was placed)
                     print("DEBUG: After balance update, balance: \(self.gameState.balance)")
                     self.animatedBalance = self.gameState.balance
                     
                     // Show balance change
                     self.showBalanceChange = true
-                    self.balanceChangeAmount = payout
+                    // For losses, show 0 change since bet was already deducted
+                    // For wins, show the winnings (payout - bet)
+                    // For pushes, show the bet return
+                    let hand = self.game.splitManager.hands[handIndex]
+                    if payout > 0 {
+                        // Win: show winnings (payout includes bet + winnings, so winnings = payout - bet)
+                        self.balanceChangeAmount = payout - hand.bet
+                    } else if payout == hand.bet {
+                        // Push: show bet return
+                        self.balanceChangeAmount = hand.bet
+                    } else {
+                        // Loss: show 0 change
+                        self.balanceChangeAmount = 0
+                    }
                     
                     // Hide balance change after 2 seconds
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
