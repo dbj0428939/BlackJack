@@ -1,0 +1,65 @@
+# Xcode
+.DS_Store
+*/build/*
+*.pbxuser
+!default.pbxuser
+*.mode1v3
+!default.mode1v3
+*.mode2v3
+!default.mode2v3
+*.perspectivev3
+!default.perspectivev3
+xcuserdata/
+*.moved-aside
+*.xccheckout
+*.xcscmblueprint
+
+# Build products
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# CocoaPods
+Pods/
+
+# Carthage
+Carthage/Build/
+
+# fastlane
+fastlane/report.xml
+fastlane/Preview.html
+fastlane/screenshots/**/*.png
+fastlane/test_output
+
+# Code Injection
+iOSInjectionProject/
+
+# Temporary files
+*.tmp
+*.temp
+
+# Audio files (if you want to exclude them)
+# *.wav
+# *.mp3
+
+# App Store Connect API Key
+AuthKey_*.p8
+
+# Provisioning profiles
+*.mobileprovision
+*.provisionprofile
+
+# Certificates
+*.p12
+*.cer
+
+# Simulator logs
+simulator.log
+
+# Xcode workspace
+*.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+.swiftpm/

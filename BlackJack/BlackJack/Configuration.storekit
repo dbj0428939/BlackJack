@@ -1,0 +1,160 @@
+{
+  "identifier" : "1234567890",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+    {
+      "displayPrice" : "1.99",
+      "familyShareable" : false,
+      "internalID" : "1234567890",
+      "localizations" : [
+        {
+          "description" : "5,000 chips to get you started",
+          "displayName" : "Starter Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.spadebet.blackjack.chips.5000",
+      "referenceName" : "Starter Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "4.99",
+      "familyShareable" : false,
+      "internalID" : "1234567891",
+      "localizations" : [
+        {
+          "description" : "30,000 chips for great value",
+          "displayName" : "Value Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.spadebet.blackjack.chips.30000",
+      "referenceName" : "Value Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "14.99",
+      "familyShareable" : false,
+      "internalID" : "1234567892",
+      "localizations" : [
+        {
+          "description" : "100,000 chips for serious players",
+          "displayName" : "Deluxe Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.spadebet.blackjack.chips.100000",
+      "referenceName" : "Deluxe Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "24.99",
+      "familyShareable" : false,
+      "internalID" : "1234567893",
+      "localizations" : [
+        {
+          "description" : "200,000 chips for premium gaming",
+          "displayName" : "Premium Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.spadebet.blackjack.chips.200000",
+      "referenceName" : "Premium Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "49.99",
+      "familyShareable" : false,
+      "internalID" : "1234567894",
+      "localizations" : [
+        {
+          "description" : "500,000 chips for elite players",
+          "displayName" : "Elite Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.spadebet.blackjack.chips.500000",
+      "referenceName" : "Elite Pack",
+      "type" : "NonConsumable"
+    },
+    {
+      "displayPrice" : "99.99",
+      "familyShareable" : false,
+      "internalID" : "1234567895",
+      "localizations" : [
+        {
+          "description" : "1,200,000 chips for ultimate gaming",
+          "displayName" : "Ultimate Pack",
+          "locale" : "en_US"
+        }
+      ],
+      "productID" : "com.spadebet.blackjack.chips.1200000",
+      "referenceName" : "Ultimate Pack",
+      "type" : "NonConsumable"
+    }
+  ],
+  "settings" : {
+    "_applicationInternalID" : "1234567890",
+    "_developerTeamID" : "ABCD123456",
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 738864000.0,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
+    "_storeKitErrors" : [
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Load Products"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Purchase"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Verification"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Store Sync"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Subscription Status"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "App Transaction"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Manage Subscriptions Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Refund Request Sheet"
+      },
+      {
+        "current" : null,
+        "enabled" : false,
+        "name" : "Offer Code Redeem Sheet"
+      }
+    ]
+  },
+  "subscriptionGroups" : [
+
+  ],
+  "version" : {
+    "major" : 3,
+    "minor" : 0
+  }
+}

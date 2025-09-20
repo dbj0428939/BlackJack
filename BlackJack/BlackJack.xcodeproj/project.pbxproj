@@ -1,0 +1,630 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3BA755F52E79E71F0054E582 /* mixkit-gold-coin-prize-1999.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755EF2E79E71F0054E582 /* mixkit-gold-coin-prize-1999.wav */; };
+		3BA755F62E79E71F0054E582 /* mixkit-hard-typewriter-click-1119.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755F02E79E71F0054E582 /* mixkit-hard-typewriter-click-1119.wav */; };
+		3BA755F72E79E71F0054E582 /* mixkit-poker-card-flick-2002.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755F42E79E71F0054E582 /* mixkit-poker-card-flick-2002.wav */; };
+		3BA755F82E79E71F0054E582 /* mixkit-melodic-gold-price-2000.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755F12E79E71F0054E582 /* mixkit-melodic-gold-price-2000.wav */; };
+		3BA755F92E79E71F0054E582 /* mixkit-coins-sound-2003.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755EE2E79E71F0054E582 /* mixkit-coins-sound-2003.wav */; };
+		3BA755FA2E79E71F0054E582 /* mixkit-casino-bling-achievement-2067.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755EB2E79E71F0054E582 /* mixkit-casino-bling-achievement-2067.wav */; };
+		3BA755FB2E79E71F0054E582 /* mixkit-modern-technology-select-3124.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755F22E79E71F0054E582 /* mixkit-modern-technology-select-3124.wav */; };
+		3BA755FC2E79E71F0054E582 /* mixkit-click-error-1110.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755EC2E79E71F0054E582 /* mixkit-click-error-1110.wav */; };
+		3BA755FD2E79E71F0054E582 /* mixkit-on-or-off-light-switch-tap-2585.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755F32E79E71F0054E582 /* mixkit-on-or-off-light-switch-tap-2585.wav */; };
+		3BA755FE2E79E71F0054E582 /* mixkit-clinking-coins-1993.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755ED2E79E71F0054E582 /* mixkit-clinking-coins-1993.wav */; };
+		3BA756002E7A2F010054E582 /* mixkit-money-bag-drop-1989.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA755FF2E7A2F010054E582 /* mixkit-money-bag-drop-1989.wav */; };
+		3BA756022E7A2F0B0054E582 /* mixkit-poker-card-placement-2001 2.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA756012E7A2F0B0054E582 /* mixkit-poker-card-placement-2001 2.wav */; };
+		3BA756042E7A2F180054E582 /* mixkit-hard-pop-click-2364.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA756032E7A2F180054E582 /* mixkit-hard-pop-click-2364.wav */; };
+		3BA756062E7A2F1F0054E582 /* mixkit-typewriter-soft-click-1125.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA756052E7A2F1F0054E582 /* mixkit-typewriter-soft-click-1125.wav */; };
+		3BA756082E7A2F240054E582 /* mixkit-paper-slide-1530.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA756072E7A2F240054E582 /* mixkit-paper-slide-1530.wav */; };
+		3BA7560A2E7A30A30054E582 /* mixkit-light-button-2580.wav in Resources */ = {isa = PBXBuildFile; fileRef = 3BA756092E7A30A30054E582 /* mixkit-light-button-2580.wav */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3B7699932DF60F2A002E10A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B76997D2DF60F28002E10A3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3B7699842DF60F28002E10A3;
+			remoteInfo = BlackJack;
+		};
+		3B76999D2DF60F2A002E10A3 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3B76997D2DF60F28002E10A3 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3B7699842DF60F28002E10A3;
+			remoteInfo = BlackJack;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		3B7699852DF60F28002E10A3 /* BlackJack.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = BlackJack.app; path = "SpadeBet BlackJack.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B7699922DF60F2A002E10A3 /* BlackJackTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = BlackJackTests.xctest; path = "SpadeBet BlackJack.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3B76999C2DF60F2A002E10A3 /* BlackJackUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = BlackJackUITests.xctest; path = "SpadeBet BlackJack.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		3BA755EB2E79E71F0054E582 /* mixkit-casino-bling-achievement-2067.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-casino-bling-achievement-2067.wav"; sourceTree = "<group>"; };
+		3BA755EC2E79E71F0054E582 /* mixkit-click-error-1110.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-click-error-1110.wav"; sourceTree = "<group>"; };
+		3BA755ED2E79E71F0054E582 /* mixkit-clinking-coins-1993.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-clinking-coins-1993.wav"; sourceTree = "<group>"; };
+		3BA755EE2E79E71F0054E582 /* mixkit-coins-sound-2003.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-coins-sound-2003.wav"; sourceTree = "<group>"; };
+		3BA755EF2E79E71F0054E582 /* mixkit-gold-coin-prize-1999.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-gold-coin-prize-1999.wav"; sourceTree = "<group>"; };
+		3BA755F02E79E71F0054E582 /* mixkit-hard-typewriter-click-1119.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-hard-typewriter-click-1119.wav"; sourceTree = "<group>"; };
+		3BA755F12E79E71F0054E582 /* mixkit-melodic-gold-price-2000.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-melodic-gold-price-2000.wav"; sourceTree = "<group>"; };
+		3BA755F22E79E71F0054E582 /* mixkit-modern-technology-select-3124.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-modern-technology-select-3124.wav"; sourceTree = "<group>"; };
+		3BA755F32E79E71F0054E582 /* mixkit-on-or-off-light-switch-tap-2585.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-on-or-off-light-switch-tap-2585.wav"; sourceTree = "<group>"; };
+		3BA755F42E79E71F0054E582 /* mixkit-poker-card-flick-2002.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-poker-card-flick-2002.wav"; sourceTree = "<group>"; };
+		3BA755FF2E7A2F010054E582 /* mixkit-money-bag-drop-1989.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-money-bag-drop-1989.wav"; sourceTree = "<group>"; };
+		3BA756012E7A2F0B0054E582 /* mixkit-poker-card-placement-2001 2.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-poker-card-placement-2001 2.wav"; sourceTree = "<group>"; };
+		3BA756032E7A2F180054E582 /* mixkit-hard-pop-click-2364.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-hard-pop-click-2364.wav"; sourceTree = "<group>"; };
+		3BA756052E7A2F1F0054E582 /* mixkit-typewriter-soft-click-1125.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-typewriter-soft-click-1125.wav"; sourceTree = "<group>"; };
+		3BA756072E7A2F240054E582 /* mixkit-paper-slide-1530.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-paper-slide-1530.wav"; sourceTree = "<group>"; };
+		3BA756092E7A30A30054E582 /* mixkit-light-button-2580.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "mixkit-light-button-2580.wav"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
+		3B7699872DF60F28002E10A3 /* BlackJack */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BlackJack;
+			sourceTree = "<group>";
+		};
+		3B7699952DF60F2A002E10A3 /* BlackJackTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BlackJackTests;
+			sourceTree = "<group>";
+		};
+		3B76999F2DF60F2A002E10A3 /* BlackJackUITests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = BlackJackUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXFileSystemSynchronizedRootGroup section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3B7699822DF60F28002E10A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B76998F2DF60F2A002E10A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B7699992DF60F2A002E10A3 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3B76997C2DF60F28002E10A3 = {
+			isa = PBXGroup;
+			children = (
+				3BA755EB2E79E71F0054E582 /* mixkit-casino-bling-achievement-2067.wav */,
+				3BA755EC2E79E71F0054E582 /* mixkit-click-error-1110.wav */,
+				3BA755ED2E79E71F0054E582 /* mixkit-clinking-coins-1993.wav */,
+				3BA755EE2E79E71F0054E582 /* mixkit-coins-sound-2003.wav */,
+				3BA755EF2E79E71F0054E582 /* mixkit-gold-coin-prize-1999.wav */,
+				3BA755F02E79E71F0054E582 /* mixkit-hard-typewriter-click-1119.wav */,
+				3BA755F12E79E71F0054E582 /* mixkit-melodic-gold-price-2000.wav */,
+				3BA755F22E79E71F0054E582 /* mixkit-modern-technology-select-3124.wav */,
+				3BA755F32E79E71F0054E582 /* mixkit-on-or-off-light-switch-tap-2585.wav */,
+				3BA755F42E79E71F0054E582 /* mixkit-poker-card-flick-2002.wav */,
+				3BA755FF2E7A2F010054E582 /* mixkit-money-bag-drop-1989.wav */,
+				3BA756012E7A2F0B0054E582 /* mixkit-poker-card-placement-2001 2.wav */,
+				3BA756032E7A2F180054E582 /* mixkit-hard-pop-click-2364.wav */,
+				3BA756052E7A2F1F0054E582 /* mixkit-typewriter-soft-click-1125.wav */,
+				3BA756072E7A2F240054E582 /* mixkit-paper-slide-1530.wav */,
+				3BA756092E7A30A30054E582 /* mixkit-light-button-2580.wav */,
+				3B7699872DF60F28002E10A3 /* BlackJack */,
+				3B7699952DF60F2A002E10A3 /* BlackJackTests */,
+				3B76999F2DF60F2A002E10A3 /* BlackJackUITests */,
+				3B7699862DF60F28002E10A3 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3B7699862DF60F28002E10A3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3B7699852DF60F28002E10A3 /* BlackJack.app */,
+				3B7699922DF60F2A002E10A3 /* BlackJackTests.xctest */,
+				3B76999C2DF60F2A002E10A3 /* BlackJackUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		3B7699842DF60F28002E10A3 /* BlackJack */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B7699A62DF60F2A002E10A3 /* Build configuration list for PBXNativeTarget "BlackJack" */;
+			buildPhases = (
+				3B7699812DF60F28002E10A3 /* Sources */,
+				3B7699822DF60F28002E10A3 /* Frameworks */,
+				3B7699832DF60F28002E10A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				3B7699872DF60F28002E10A3 /* BlackJack */,
+			);
+			name = BlackJack;
+			packageProductDependencies = (
+			);
+			productName = BlackJack;
+			productReference = 3B7699852DF60F28002E10A3 /* BlackJack.app */;
+			productType = "com.apple.product-type.application";
+		};
+		3B7699912DF60F2A002E10A3 /* BlackJackTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B7699A92DF60F2A002E10A3 /* Build configuration list for PBXNativeTarget "BlackJackTests" */;
+			buildPhases = (
+				3B76998E2DF60F2A002E10A3 /* Sources */,
+				3B76998F2DF60F2A002E10A3 /* Frameworks */,
+				3B7699902DF60F2A002E10A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3B7699942DF60F2A002E10A3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3B7699952DF60F2A002E10A3 /* BlackJackTests */,
+			);
+			name = BlackJackTests;
+			packageProductDependencies = (
+			);
+			productName = BlackJackTests;
+			productReference = 3B7699922DF60F2A002E10A3 /* BlackJackTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		3B76999B2DF60F2A002E10A3 /* BlackJackUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3B7699AC2DF60F2A002E10A3 /* Build configuration list for PBXNativeTarget "BlackJackUITests" */;
+			buildPhases = (
+				3B7699982DF60F2A002E10A3 /* Sources */,
+				3B7699992DF60F2A002E10A3 /* Frameworks */,
+				3B76999A2DF60F2A002E10A3 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3B76999E2DF60F2A002E10A3 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				3B76999F2DF60F2A002E10A3 /* BlackJackUITests */,
+			);
+			name = BlackJackUITests;
+			packageProductDependencies = (
+			);
+			productName = BlackJackUITests;
+			productReference = 3B76999C2DF60F2A002E10A3 /* BlackJackUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3B76997D2DF60F28002E10A3 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1630;
+				LastUpgradeCheck = 1630;
+				TargetAttributes = {
+					3B7699842DF60F28002E10A3 = {
+						CreatedOnToolsVersion = 16.3;
+					};
+					3B7699912DF60F2A002E10A3 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 3B7699842DF60F28002E10A3;
+					};
+					3B76999B2DF60F2A002E10A3 = {
+						CreatedOnToolsVersion = 16.3;
+						TestTargetID = 3B7699842DF60F28002E10A3;
+					};
+				};
+			};
+			buildConfigurationList = 3B7699802DF60F28002E10A3 /* Build configuration list for PBXProject "BlackJack" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 3B76997C2DF60F28002E10A3;
+			minimizedProjectReferenceProxies = 1;
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 3B7699862DF60F28002E10A3 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3B7699842DF60F28002E10A3 /* BlackJack */,
+				3B7699912DF60F2A002E10A3 /* BlackJackTests */,
+				3B76999B2DF60F2A002E10A3 /* BlackJackUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3B7699832DF60F28002E10A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3BA755F52E79E71F0054E582 /* mixkit-gold-coin-prize-1999.wav in Resources */,
+				3BA755F62E79E71F0054E582 /* mixkit-hard-typewriter-click-1119.wav in Resources */,
+				3BA755F72E79E71F0054E582 /* mixkit-poker-card-flick-2002.wav in Resources */,
+				3BA756062E7A2F1F0054E582 /* mixkit-typewriter-soft-click-1125.wav in Resources */,
+				3BA755F82E79E71F0054E582 /* mixkit-melodic-gold-price-2000.wav in Resources */,
+				3BA756022E7A2F0B0054E582 /* mixkit-poker-card-placement-2001 2.wav in Resources */,
+				3BA755F92E79E71F0054E582 /* mixkit-coins-sound-2003.wav in Resources */,
+				3BA756042E7A2F180054E582 /* mixkit-hard-pop-click-2364.wav in Resources */,
+				3BA755FA2E79E71F0054E582 /* mixkit-casino-bling-achievement-2067.wav in Resources */,
+				3BA755FB2E79E71F0054E582 /* mixkit-modern-technology-select-3124.wav in Resources */,
+				3BA756002E7A2F010054E582 /* mixkit-money-bag-drop-1989.wav in Resources */,
+				3BA755FC2E79E71F0054E582 /* mixkit-click-error-1110.wav in Resources */,
+				3BA755FD2E79E71F0054E582 /* mixkit-on-or-off-light-switch-tap-2585.wav in Resources */,
+				3BA756082E7A2F240054E582 /* mixkit-paper-slide-1530.wav in Resources */,
+				3BA755FE2E79E71F0054E582 /* mixkit-clinking-coins-1993.wav in Resources */,
+				3BA7560A2E7A30A30054E582 /* mixkit-light-button-2580.wav in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B7699902DF60F2A002E10A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B76999A2DF60F2A002E10A3 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3B7699812DF60F28002E10A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B76998E2DF60F2A002E10A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3B7699982DF60F2A002E10A3 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3B7699942DF60F2A002E10A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3B7699842DF60F28002E10A3 /* BlackJack */;
+			targetProxy = 3B7699932DF60F2A002E10A3 /* PBXContainerItemProxy */;
+		};
+		3B76999E2DF60F2A002E10A3 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3B7699842DF60F28002E10A3 /* BlackJack */;
+			targetProxy = 3B76999D2DF60F2A002E10A3 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3B7699A42DF60F2A002E10A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		3B7699A52DF60F2A002E10A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		3B7699A72DF60F2A002E10A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dave.b.BlackJack;
+				PRODUCT_NAME = "SpadeBet BlackJack";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		3B7699A82DF60F2A002E10A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dave.b.BlackJack;
+				PRODUCT_NAME = "SpadeBet BlackJack";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		3B7699AA2DF60F2A002E10A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dave.b.BlackJackTests;
+				PRODUCT_NAME = "SpadeBet BlackJack";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlackJack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BlackJack";
+			};
+			name = Debug;
+		};
+		3B7699AB2DF60F2A002E10A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dave.b.BlackJackTests;
+				PRODUCT_NAME = "SpadeBet BlackJack";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/BlackJack.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/BlackJack";
+			};
+			name = Release;
+		};
+		3B7699AD2DF60F2A002E10A3 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dave.b.BlackJackUITests;
+				PRODUCT_NAME = "SpadeBet BlackJack";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BlackJack;
+			};
+			name = Debug;
+		};
+		3B7699AE2DF60F2A002E10A3 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = LMQB65W6T8;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dave.b.BlackJackUITests;
+				PRODUCT_NAME = "SpadeBet BlackJack";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = BlackJack;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3B7699802DF60F28002E10A3 /* Build configuration list for PBXProject "BlackJack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B7699A42DF60F2A002E10A3 /* Debug */,
+				3B7699A52DF60F2A002E10A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B7699A62DF60F2A002E10A3 /* Build configuration list for PBXNativeTarget "BlackJack" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B7699A72DF60F2A002E10A3 /* Debug */,
+				3B7699A82DF60F2A002E10A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B7699A92DF60F2A002E10A3 /* Build configuration list for PBXNativeTarget "BlackJackTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B7699AA2DF60F2A002E10A3 /* Debug */,
+				3B7699AB2DF60F2A002E10A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3B7699AC2DF60F2A002E10A3 /* Build configuration list for PBXNativeTarget "BlackJackUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3B7699AD2DF60F2A002E10A3 /* Debug */,
+				3B7699AE2DF60F2A002E10A3 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3B76997D2DF60F28002E10A3 /* Project object */;
+}
