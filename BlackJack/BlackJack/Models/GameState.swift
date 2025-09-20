@@ -84,7 +84,10 @@ public class GameState: ObservableObject {
     }
     
     public func resolveBet(with payout: Double, insuranceResult: Bool?) {
-        balance += payout // Add payout only (bet was already deducted when placed)
+        if payout > 0 {
+            balance += payout // Add payout only (bet was already deducted when placed)
+        }
+        // For losses (payout = 0), no balance change since bet was already deducted
         
         if let won = insuranceResult, won == true {
             // When insurance wins: get original bet back + insurance payout (2:1)

@@ -724,7 +724,7 @@ class BlackjackGame: ObservableObject {
             }
         } else if playerHand.isBust {
             resultMessage = "You lose."
-            payout = -currentBet
+            payout = 0  // Loss: no payout, bet already deducted
             // Play lose sound
             SoundManager.shared.playLose()
             gameStats.recordPlayerBust()
@@ -734,7 +734,7 @@ class BlackjackGame: ObservableObject {
             gameStats.recordPlayerWin()
         } else if dealerHand.value > playerHand.value {
             resultMessage = "You lose."
-            payout = -currentBet
+            payout = 0  // Loss: no payout, bet already deducted
             gameStats.recordPlayerLoss()
         } else if dealerHand.value < playerHand.value {
             resultMessage = "You win!"
