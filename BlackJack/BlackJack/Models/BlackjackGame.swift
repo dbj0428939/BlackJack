@@ -568,8 +568,11 @@ class BlackjackGame: ObservableObject {
         let hand = splitManager.hands[splitManager.activeHandIndex]
         print("DEBUG: Hitting on active hand \(splitManager.activeHandIndex + 1), cards before: \(hand.cards.count)")
         
-        // REMOVED: Auto-stand logic for split aces
-        // Split aces should allow normal hit/stand/double actions
+        // CASINO RULE: Check if this is a split ace hand that has already received its one additional card
+        if hand.isSplitAceHand && hand.cards.count >= 3 {
+            print("DEBUG: Cannot hit on split ace hand - already received one additional card")
+            return
+        }
         
         // Draw a card that won't create split opportunities during split hands
         if let card = drawCardAvoidingSplitOpportunities(for: hand) {
@@ -580,9 +583,9 @@ class BlackjackGame: ObservableObject {
         }
         print("DEBUG: Cards after hit: \(hand.cards.count)")
         
-        // Only auto-stand if busted (never auto-stand split aces)
-        if hand.isBust {
-            print("DEBUG: Hand busted, auto-standing")
+        // Auto-stand if busted or if split ace hand is now complete
+        if hand.isBust || (hand.isSplitAceHand && hand.cards.count == 3) {
+            print("DEBUG: Hand busted or split ace hand complete, auto-standing")
             standOnActiveHand()
         }
     }
@@ -628,6 +631,13 @@ class BlackjackGame: ObservableObject {
         print("🎯 Hand value: \(hand.value)")
         print("🎯 Hand bet: \(hand.bet)")
         print("🎯 Balance: \(balance)")
+        print("🎯 Is split ace hand: \(hand.isSplitAceHand)")
+        
+        // CASINO RULE: Cannot double down on split ace hands
+        if hand.isSplitAceHand {
+            print("🎯 Failed: Cannot double down on split ace hands")
+            return false
+        }
         
         // Must have exactly 2 cards
         guard hand.cards.count == 2 else { 

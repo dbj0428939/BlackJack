@@ -65,6 +65,11 @@ public class SplitHand: ObservableObject, Identifiable {
         updateHandStatus()
     }
     
+    // Check if this is a split ace hand (starts with ace and has exactly 2 cards)
+    public var isSplitAceHand: Bool {
+        return cards.count == 2 && cards[0].rank == .ace && cards[1].rank == .ace
+    }
+    
     public func doubleDown(with card: Card) {
         bet *= 2
         addCard(card)
@@ -80,8 +85,13 @@ public class SplitHand: ObservableObject, Identifiable {
         // Split hands should always allow hit/stand/double unless explicitly stood
         isBlackjack = false
         
-        // Update status based on hand state
-        if isBusted {
+        // CASINO RULE: Split aces get exactly one additional card and are then complete
+        if isSplitAceHand && cards.count == 3 {
+            // Split ace hand has received its one additional card, auto-complete
+            isComplete = true
+            status = .complete
+            print("DEBUG SPLIT HAND: Split ace hand auto-completed after receiving one additional card")
+        } else if isBusted {
             status = .busted
             isComplete = true
         } else if isComplete {
@@ -89,7 +99,7 @@ public class SplitHand: ObservableObject, Identifiable {
             status = .complete
         } else {
             status = .playing
-            // CRITICAL FIX: Never auto-complete split hands
+            // CRITICAL FIX: Never auto-complete split hands (except split aces)
             // Only mark as complete if explicitly stood or doubled down
             isComplete = false
         }
@@ -176,6 +186,10 @@ public class SplitGameManager: ObservableObject {
     
     public var canDoubleDownCurrentHand: Bool {
         guard let hand = activeHand else { return false }
+        // CASINO RULE: Cannot double down on split ace hands
+        if hand.isSplitAceHand {
+            return false
+        }
         return hand.cards.count == 2 && hand.status == SplitHand.HandStatus.playing
     }
     
@@ -360,14 +374,26 @@ public class SplitGameManager: ObservableObject {
         
         switch action {
         case .hit:
+            // CASINO RULE: Cannot hit on split ace hands that have already received their one additional card
+            if hand.isSplitAceHand && hand.cards.count >= 3 {
+                print("DEBUG SPLIT HAND: Cannot hit on split ace hand - already received one additional card")
+                return ActionResult(success: false, shouldAdvanceHand: false)
+            }
+            
             hand.addCard(card)
-            // Only advance if busted (never auto-advance split hands for 21)
-            if hand.isBust {
+            // Only advance if busted or if split ace hand is now complete
+            if hand.isBust || (hand.isSplitAceHand && hand.cards.count == 3) {
                 return ActionResult(success: true, shouldAdvanceHand: true)
             }
             return ActionResult(success: true, shouldAdvanceHand: false)
             
         case .doubleDown:
+            // CASINO RULE: Cannot double down on split ace hands
+            if hand.isSplitAceHand {
+                print("DEBUG SPLIT HAND: Cannot double down on split ace hand")
+                return ActionResult(success: false, shouldAdvanceHand: false)
+            }
+            
             if hand.cards.count != 2 || hand.status != SplitHand.HandStatus.playing {
                 return ActionResult(success: false, shouldAdvanceHand: false)
             }
@@ -387,7 +413,8 @@ public class SplitGameManager: ObservableObject {
         for (index, hand) in hands.enumerated() {
             // Update canSplit and canDoubleDown properties
             hand.canSplit = canSplitHand(at: index)
-            hand.canDoubleDown = hand.cards.count == 2 && hand.status == SplitHand.HandStatus.playing
+            // CASINO RULE: Cannot double down on split ace hands
+            hand.canDoubleDown = hand.cards.count == 2 && hand.status == SplitHand.HandStatus.playing && !hand.isSplitAceHand
             
             // Check if hand is active
             hand.isActive = index == activeHandIndex && splitPhase == .playing
