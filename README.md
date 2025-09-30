@@ -196,15 +196,12 @@ The app tracks the following metrics:
 4. Push to the branch (`git push origin feature/AmazingFeature`)
 5. Open a Pull Request
 
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## 👨‍💻 Author
 
 **David Johnson**
-- GitHub: [@yourusername](https://github.com/yourusername)
-- Email: your.email@example.com
+- GitHub: [@dbj0428939](https://github.com/dbj0428939)
+- Email: david.b.johnson.dev@gmail.com
 
 ## 🙏 Acknowledgments
 

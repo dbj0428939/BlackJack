@@ -5,17 +5,18 @@ struct AddFundsView: View {
     @EnvironmentObject var gameState: GameState
     @State private var amount: String = ""
     @State private var animateFloating = false
-    
+    @State private var isRewardLoading = false
+    @State private var showRewardError = false
+
     let presetAmounts = [100, 500, 1000, 2000, 5000]
-    
+
     var body: some View {
         NavigationView {
             ZStack {
                 BlueTableBackground()
                     .edgesIgnoringSafeArea(.all)
-                
                 // Floating card suits animation
-                ForEach(0..<4, id: \.self) { i in
+                ForEach(0..<4, id: \ .self) { i in
                     let suits = ["suit.heart.fill", "suit.diamond.fill", "suit.club.fill", "suit.spade.fill"]
                     Image(systemName: suits[i])
                         .font(.system(size: CGFloat.random(in: 12...18)))
@@ -32,12 +33,10 @@ struct AddFundsView: View {
                             value: animateFloating
                         )
                 }
-                
                 VStack(spacing: 20) {
                     Text("Add Funds")
                         .font(.title)
                         .foregroundColor(.white)
-                    
                     TextField("Enter amount", text: $amount)
                         .keyboardType(.decimalPad)
                         .textFieldStyle(RoundedBorderTextFieldStyle())
@@ -45,16 +44,14 @@ struct AddFundsView: View {
                         .background(Color.white)
                         .cornerRadius(10)
                         .padding(.horizontal)
-                    
                     Text("Quick Add:")
                         .foregroundColor(.white)
                         .font(.headline)
-                    
                     LazyVGrid(columns: [
                         GridItem(.flexible()),
                         GridItem(.flexible())
                     ], spacing: 10) {
-                        ForEach(presetAmounts, id: \.self) { amount in
+                        ForEach(presetAmounts, id: \ .self) { amount in
                             Button(action: {
                                 self.amount = String(amount)
                             }) {
@@ -63,12 +60,10 @@ struct AddFundsView: View {
                                     .frame(maxWidth: .infinity)
                                     .padding()
                                     .background(Color.green)
-                                    .cornerRadius(10)
                             }
                         }
                     }
                     .padding(.horizontal)
-                    
                     Button(action: addFunds) {
                         Text("Add Funds")
                             .font(.title3)
@@ -79,6 +74,26 @@ struct AddFundsView: View {
                     }
                     .disabled(amount.isEmpty || Double(amount) ?? 0 <= 0)
                     .opacity(amount.isEmpty || Double(amount) ?? 0 <= 0 ? 0.5 : 1)
+
+                    Divider().padding(.vertical, 10)
+
+                    Button(action: showRewardAd) {
+                        HStack {
+                            if isRewardLoading {
+                                ProgressView()
+                            }
+                            Text("Watch Ad for 50 Free Chips")
+                                .font(.headline)
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(RewardedAdManager.shared.isAdLoaded ? Color.orange : Color.gray)
+                                .cornerRadius(10)
+                        }
+                    }
+                    .disabled(isRewardLoading || !RewardedAdManager.shared.isAdLoaded)
+                    .alert(isPresented: $showRewardError) {
+                        Alert(title: Text("Ad Error"), message: Text("Ad is not ready yet. Please wait a moment and try again."), dismissButton: .default(Text("OK")))
+                    }
                 }
             }
             .navigationBarItems(trailing: Button("Close") {
@@ -88,21 +103,27 @@ struct AddFundsView: View {
         }
         .onAppear {
             animateFloating = true
+            RewardedAdManager.shared.preloadAd()
         }
     }
-    
+
+    private func showRewardAd() {
+        isRewardLoading = true
+        let success = AdMobManager.shared.showRewardedAd {
+            // User earned reward
+            gameState.addFunds(50)
+        }
+        isRewardLoading = false
+        if !success {
+            showRewardError = true
+        }
+    }
+
     private func addFunds() {
-        if let amount = Double(amount) {
-            gameState.addFunds(amount)
+        if let value = Double(amount) {
+            gameState.addFunds(value)
             SoundManager.shared.playBackButton()
             presentationMode.wrappedValue.dismiss()
         }
     }
 }
-
-struct AddFundsView_Previews: PreviewProvider {
-    static var previews: some View {
-        AddFundsView()
-            .environmentObject(GameState())
-    }
-} 

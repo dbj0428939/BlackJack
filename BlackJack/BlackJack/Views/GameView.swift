@@ -1,6 +1,7 @@
 import AVFoundation
 import SwiftUI
 import Foundation
+import GoogleMobileAds
 
 // MARK: - Split Collapse Transition Overlay
 struct SplitCollapseTransitionOverlay: View {
@@ -247,6 +248,30 @@ struct GameView: View {
     @State private var bettingCirclesVisible = true
     @State private var holeCardPeekOffset: CGFloat = 0
     @State private var chipAnimations: [Int: Bool] = [:] // Track chip animations by value
+    
+    // Interstitial Ad
+    @State private var interstitial: InterstitialAd?
+    private let interstitialAdUnitID = "ca-app-pub-4504051516226977/8440598650"
+    
+    private func loadAndShowAd() {
+        print("Loading ad...")
+        let request = Request()
+        InterstitialAd.load(with: interstitialAdUnitID, request: request) { ad, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    print("Failed to load ad: \(error)")
+                    return
+                }
+                print("Ad loaded successfully")
+                self.interstitial = ad
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let rootViewController = windowScene.windows.first?.rootViewController {
+                    print("Presenting ad...")
+                    ad?.present(from: rootViewController)
+                }
+            }
+        }
+    }
     @State private var animatingChips: [AnimatingChip] = [] // Track flying chips
     @State private var navigateToStats = false // Track navigation to stats screen
     @State private var navigateToSettings = false // Track navigation to settings screen
@@ -532,16 +557,19 @@ struct GameView: View {
     var body: some View {
         NavigationStack {
             ZStack {
-                BlueTableBackground(showTableDesigns: true)
-                    .ignoresSafeArea(.all)
+                GameBackground()
                     .frame(maxWidth: .infinity, maxHeight: .infinity)  // Ensure background fills entire screen
+                    .onAppear {
+                        loadAndShowAd()
+                    }
 
             VStack(spacing: 0) {  // This VStack contains top elements and the main game flow area
                 // Top buttons (exit and stats) - Only show at top when NOT game over, NOT dealer peeking, NOT dealer drawing, and NOT during initial dealing
                 if game.gameState != .gameOver && game.gameState != .dealerTurn && (dealt || game.gameState == .betting) {
                     topButtonsView
                         .padding(.top, game.gameState == .betting ? -80 : 30)  // Move buttons up more on betting screen
-                        .opacity(game.gameState == BlackjackGameState.offeringInsurance ? 0.3 : 1.0)
+                        .opacity(isDealingCards ? 0 : (game.gameState == BlackjackGameState.offeringInsurance ? 0.3 : 1.0))
+                        .animation(.easeInOut(duration: 0.3), value: isDealingCards)
                         .frame(maxWidth: .infinity, alignment: .top)
                         .onAppear {
                             print("DEBUG: Showing top buttons - isDealingCards: \(isDealingCards), gameState: \(game.gameState), dealerPeeking: \(dealerPeeking)")
@@ -913,6 +941,21 @@ struct GameView: View {
                     print("DEBUG: Resolving bet - payout: \(game.payout), current balance: \(gameState.balance)")
                     gameState.resolveBet(with: game.payout, insuranceResult: game.insuranceResult)
                     print("DEBUG: After resolve bet - new balance: \(gameState.balance)")
+                    // --- Sync stats to global GameState for accurate statistics ---
+                    // Loss
+                    if game.resultMessage.contains("lose") || game.resultMessage.contains("Bust") {
+                        gameState.gamesLost += 1
+                        gameState.gamesPlayed += 1
+                    }
+                    // Win
+                    else if game.resultMessage.contains("win") || game.resultMessage.contains("Blackjack") {
+                        gameState.gamesWon += 1
+                        gameState.gamesPlayed += 1
+                    }
+                    // Push
+                    else if game.resultMessage.contains("Push") {
+                        gameState.gamesPlayed += 1
+                    }
                 }
                 let finalBalance = gameState.balance
                 
@@ -956,6 +999,11 @@ struct GameView: View {
                             showGameResultText = true
                         }
                     }
+                }
+                // Trigger interstitial ad after each hand is completed
+                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+                   let rootVC = windowScene.windows.first?.rootViewController {
+                    AdMobManager.shared.incrementHandsPlayedAndShowInterstitialIfNeeded(presentingViewController: rootVC)
                 }
             }
         }
@@ -2895,7 +2943,7 @@ struct GameView: View {
 
     private var topButtonsView: some View {
         HStack(spacing: 20) {  // Close spacing between buttons
-            // Exit button (left) - hidden during dealer drawing
+            // Exit button (left) - hidden during dealer drawing and initial dealing
             if game.gameState != .dealerTurn && (dealt || game.gameState == .betting) {
                 Button(action: {
                     showHomeConfirm = true
@@ -2907,6 +2955,8 @@ struct GameView: View {
                         .background(Color.black.opacity(0.5))
                         .clipShape(Circle())
                         .shadow(color: Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.3), radius: 4, y: 2)
+                        .opacity(isDealingCards ? 0 : 1)
+                        .animation(.easeInOut(duration: 0.3), value: isDealingCards)
                 }
                 .padding(.leading, 40)  // Position from left edge
                 .padding(.top, 110)  // Even lower positioning
@@ -2933,6 +2983,8 @@ struct GameView: View {
                     print("DEBUG: Settings button tapped (main game)")
                     navigateToSettings = true
                 }
+                .opacity(isDealingCards ? 0 : 1)
+                .animation(.easeInOut(duration: 0.3), value: isDealingCards)
                 .padding(.trailing, 40)  // Position from right edge
                 .padding(.top, 110)  // Even lower positioning
             }
@@ -4325,7 +4377,7 @@ struct EnhancedAddFundsView: View {
         
         var description: String {
             switch self {
-            case .watchAd: return "Watch a 30-second ad"
+            case .watchAd: return "To watch another ad, exit the app and return here"
             case .purchase5000: return "5,000 chips"
             case .purchase30000: return "30,000 chips"
             case .purchase200000: return "200,000 chips"
@@ -4538,44 +4590,59 @@ struct EnhancedAddFundsView: View {
             purchaseChips()
         }
     }
-    
-    private func watchAdForChips() {
-        isWatchingAd = true
-        
-        // Simulate ad watching
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
-            gameState.addFunds(Double(selectedOption.chipAmount))
-            isWatchingAd = false
-            purchaseSuccessMessage = "You received \(selectedOption.chipAmount) chips!"
-            showPurchaseSuccess = true
-        }
-    }
-    
+
     private func purchaseChips() {
-        guard let productId = selectedOption.productId,
-              let product = storeManager.products.first(where: { $0.id == productId }) else {
+        print("purchaseChips called. Products loaded: \(storeManager.products.count)")
+        guard let productId = selectedOption.productId else {
+            print("No productId for selected option: \(selectedOption)")
             return
         }
-        
+        guard let product = storeManager.products.first(where: { $0.id == productId }) else {
+            print("No StoreKit product found for productId: \(productId)")
+            return
+        }
+        print("Attempting to purchase product: \(product.id) - \(product.displayName)")
         Task {
             let result = await storeManager.purchase(product)
-            
             await MainActor.run {
+                print("Purchase result: \(result)")
                 switch result {
                 case .success:
                     purchaseSuccessMessage = "You received \(selectedOption.chipAmount) chips!"
                     showPurchaseSuccess = true
                 case .cancelled:
-                    // User cancelled, no action needed
+                    print("Purchase cancelled by user.")
                     break
                 case .failure(let error):
-                    // Handle error - could show an alert
                     print("Purchase failed: \(error)")
                 }
             }
         }
     }
-}
+    
+    private func watchAdForChips() {
+        print("🎯 AdMob: watchAdForChips called")
+        
+        // Check ad status first
+    // No checkAdStatus in AdMobManager; ad status is tracked by isAdLoaded
+        
+        // Ad status is tracked by isAdLoaded
+        guard AdMobManager.shared.isAdLoaded else {
+            print("🎯 AdMob: Ad not ready, showing fallback message")
+            purchaseSuccessMessage = "Ad is loading. Please wait a moment and try again."
+            showPurchaseSuccess = true
+            return
+        }
+        isWatchingAd = true
+        AdMobManager.shared.showRewardedAd(onReward: {
+            self.gameState.addFunds(Double(self.selectedOption.chipAmount))
+            self.purchaseSuccessMessage = "You received \(self.selectedOption.chipAmount) chips!"
+            self.showPurchaseSuccess = true
+            self.isWatchingAd = false
+            print("🎯 AdMob: Coins awarded successfully!")
+        })
+    }
+// ...existing code...
 
 struct AddFundsOptionView: View {
     let option: EnhancedAddFundsView.AddFundsOption
@@ -4621,6 +4688,7 @@ struct AddFundsOptionView: View {
                         .font(.subheadline.bold())
                         .foregroundColor(option.color)
                 }
+                adStatusView
             }
             .padding(20)
             .background(
@@ -4633,6 +4701,24 @@ struct AddFundsOptionView: View {
             )
         }
         .buttonStyle(PlainButtonStyle())
+    // Always enabled for watch ad
+    }
+
+    private var adStatusView: some View {
+        Group {
+            if option == .watchAd && !AdMobManager.shared.canShowAd {
+                if AdMobManager.shared.adLoadingElapsed < 10 {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                        .frame(width: 24, height: 24)
+                } else {
+                    Text("Try Again")
+                        .font(.caption)
+                        .foregroundColor(.white)
+                        .padding(.leading, 8)
+                }
+            }
+        }
     }
     
     private var displayPrice: String {
@@ -4650,4 +4736,5 @@ struct AddFundsOptionView: View {
         return option.price
     }
 }
-
+// Add missing closing brace for EnhancedAddFundsView
+}

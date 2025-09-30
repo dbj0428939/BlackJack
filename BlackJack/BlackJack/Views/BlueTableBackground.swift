@@ -24,30 +24,7 @@ public struct BlueTableBackground: View {
                 endRadius: 600
             )
             
-            // Gold table border
-            RoundedRectangle(cornerRadius: 20)
-                .stroke(
-                    LinearGradient(
-                        gradient: Gradient(colors: [
-                            Color(red: 1.0, green: 0.84, blue: 0.0),  // Gold
-                            Color(red: 0.8, green: 0.6, blue: 0.0),   // Darker gold
-                            Color(red: 1.0, green: 0.84, blue: 0.0)   // Gold
-                        ]),
-                        startPoint: .topLeading,
-                        endPoint: .bottomTrailing
-                    ),
-                    lineWidth: 8
-                )
-                .padding(20)
-                .shadow(color: Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.5), radius: 10, x: 0, y: 0)
-            
-            // Inner gold border
-            RoundedRectangle(cornerRadius: 15)
-                .stroke(
-                    Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.6),
-                    lineWidth: 2
-                )
-                .padding(35)
+            // Borders removed
             
             // Table felt texture overlay
             Rectangle()

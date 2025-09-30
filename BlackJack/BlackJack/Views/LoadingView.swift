@@ -6,6 +6,7 @@ struct LoadingView: View {
     @State private var glowIntensity: CGFloat = 0.8
     @State private var backgroundOpacity: Double = 1.0
     @State private var isActive = false
+    @State private var showTransition = false
     
     var body: some View {
         NavigationStack {
@@ -86,7 +87,7 @@ struct LoadingView: View {
                             value: pulseScale
                         )
                     
-                    // Gold spade
+                    // Gold spade with transition
                     Image(systemName: "suit.spade.fill")
                         .font(.system(size: 100))
                         .foregroundStyle(
@@ -101,15 +102,12 @@ struct LoadingView: View {
                         )
                         .shadow(color: .yellow.opacity(0.25), radius: 8, x: 0, y: 0) // Reduced shadow
                         .rotationEffect(.degrees(rotation))
-                        .scaleEffect(isActive ? 5.0 : 1.0)
-                        .opacity(isActive ? 0 : 1.0)
-                        .animation(
-                            isActive ?
-                                Animation.easeIn(duration: 0.8) :
-                                Animation.linear(duration: 8).repeatForever(autoreverses: false),
-                            value: isActive ? 0 : rotation
-                        )
+                        .scaleEffect(showTransition ? 6.0 : 1.0)
+                        .opacity(showTransition ? 0 : 1.0)
+                        .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: rotation)
+                        .animation(.easeInOut(duration: 0.9), value: showTransition)
                 }
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
                 .opacity(backgroundOpacity)
                 .onAppear(perform: startLoadingAnimation)
                 
@@ -119,6 +117,7 @@ struct LoadingView: View {
                     label: { EmptyView() }
                 )
             }
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
             .navigationBarHidden(true)
         }
         .statusBar(hidden: true)
@@ -134,11 +133,19 @@ struct LoadingView: View {
             rotation = 360
         }
         
-        // Simulate loading time
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.5) {
-            withAnimation(.easeInOut(duration: 0.8)) {
-                isActive = true
+        // Simulate loading time (slightly longer), then perform zoom transition before navigating
+        let loadingDelay: TimeInterval = 3.2
+        let transitionDuration: TimeInterval = 0.9
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + loadingDelay) {
+            // Zoom and fade the spade + background
+            withAnimation(.easeInOut(duration: transitionDuration)) {
+                showTransition = true
                 backgroundOpacity = 0.0
+            }
+            // Navigate after the transition completes
+            DispatchQueue.main.asyncAfter(deadline: .now() + transitionDuration) {
+                isActive = true
             }
         }
     }
@@ -147,4 +154,3 @@ struct LoadingView: View {
 #Preview {
     LoadingView()
 }
-

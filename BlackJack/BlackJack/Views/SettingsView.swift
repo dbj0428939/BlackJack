@@ -8,6 +8,10 @@ struct SettingsView: View {
     @StateObject private var storeManager = StoreManager()
     @State private var showingAddFunds = false
     
+    @State private var showHeader = false
+    @State private var showSections = false
+    @State private var showBack = false
+    
     var body: some View {
         ZStack {
             // Background matching the game theme
@@ -27,6 +31,7 @@ struct SettingsView: View {
                             .foregroundColor(.white)
                     }
                     .padding(.top, 20)
+                    .smoothEntrance(visible: showHeader, offset: 14, scale: 0.98, delay: 0.05)
                     
                     // Settings sections
                     VStack(spacing: 20) {
@@ -133,6 +138,7 @@ struct SettingsView: View {
                         }
                     }
                     .padding(.horizontal, 20)
+                    .smoothEntrance(visible: showSections, offset: 16, scale: 0.985, delay: 0.12)
                     
                     Spacer(minLength: 40)
                 }
@@ -168,6 +174,7 @@ struct SettingsView: View {
                 }
                 .padding(.top, 10)
                 .padding(.leading, 20)
+                .smoothEntrance(visible: showBack, offset: -10, scale: 1.0, delay: 0.18, animation: .easeOut(duration: 0.5))
                 Spacer()
             }
         )
@@ -175,6 +182,11 @@ struct SettingsView: View {
             EnhancedAddFundsView()
                 .environmentObject(gameState)
                 .environmentObject(storeManager)
+        }
+        .onAppear {
+            withAnimation { showHeader = true }
+            withAnimation { showSections = true }
+            withAnimation { showBack = true }
         }
     }
     

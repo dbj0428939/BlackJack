@@ -1,5 +1,9 @@
+    // Track hands played for interstitial ad logic
+        // Remove duplicate handsPlayed property
 import Foundation
 import SwiftUI
+import SwiftUI
+import GoogleMobileAds
 
 // All model types (Hand, Deck, GameStats, SplitGameManager, SplitHand, Rank) are defined
 // in separate files within the same module and should be automatically available
@@ -37,6 +41,9 @@ class BlackjackGame: ObservableObject {
     
     // Enhanced split functionality
     @Published public var splitManager = SplitGameManager()
+    
+    // AdMob integration
+    private let adMobManager = AdMobManager.shared
     
     // Legacy split properties for backward compatibility
     @Published public var hands: [Hand] = []  // All player hands
@@ -282,6 +289,8 @@ class BlackjackGame: ObservableObject {
             payout = currentBet + (currentBet * 1.5)  // Return bet + 3:2 winnings for blackjack
             resultMessage = "Blackjack!"
             print("DEBUG: Blackjack detected! Payout set to: \(payout)")
+            
+            // Removed: Do not show rewarded ad automatically after immediate blackjack
         }
     }
 
@@ -322,11 +331,20 @@ class BlackjackGame: ObservableObject {
                 payout = currentBet  // Return the bet for push
                 resultMessage = "Push!"
             } else {
-                payout = -currentBet
-                resultMessage = "You lose."
+                // If player took insurance, they get their bet back + insurance payout
+                // If no insurance, they lose their bet
+                if insuranceTaken {
+                    payout = currentBet  // Return the original bet
+                    resultMessage = "You lose, but insurance pays!"
+                } else {
+                    payout = 0  // Loss: no payout, bet already deducted
+                    resultMessage = "You lose."
+                }
                 // Play lose sound when dealer has blackjack and player doesn't
                 SoundManager.shared.playLose()
             }
+            
+            // Removed: Do not show rewarded ad automatically after dealer blackjack
             return
         }
 
@@ -337,6 +355,8 @@ class BlackjackGame: ObservableObject {
             print("DEBUG: Blackjack detected in checkForBlackjacks! Payout set to: \(payout)")
             // Play blackjack sound
             SoundManager.shared.playBlackjack()
+            
+            // Removed: Do not show rewarded ad automatically after blackjack
             return
         }
         gameState = .playerTurn
@@ -358,14 +378,32 @@ class BlackjackGame: ObservableObject {
                 resultMessage = "Bust! You lose!"
                 payout = -currentBet
                 gameState = .gameOver
+                gameStats.recordPlayerLoss()
+                // Also update global stats for UI
+                // Removed: deleted code accessing UIApplication.shared.delegate as? AppDelegate and environmentObject
                 // Play bust sound
                 SoundManager.shared.playBust()
+                // Removed: Do not show rewarded ad automatically after bust
                 determineWinner()
             }
         }
     }
 
-    func stand() {
+    func reset() {
+            gameState = .betting
+            playerHand.clear()
+            dealerHand.clear()
+            resultMessage = ""
+            currentBet = 0
+            payout = 0
+            insuranceResult = nil
+            // Reset split manager
+            splitManager.reset()
+            // Reset legacy split data
+            hands.removeAll()
+            activeHandIndex = 0
+            splitBets.removeAll()
+            splitResults.removeAll()
         guard gameState == .playerTurn else { return }
         
         // Play stand sound
@@ -519,6 +557,8 @@ class BlackjackGame: ObservableObject {
             // All hands processed, complete the game
             splitManager.completeAllHands()
             gameState = .gameOver
+            
+            // Removed: Do not show rewarded ad automatically after split game ends
             return
         }
         
@@ -547,12 +587,16 @@ class BlackjackGame: ObservableObject {
         
         if hand.isBust {
             gameStats.recordPlayerBust()
+            // Also update global stats for UI
+            // Removed: deleted code accessing UIApplication.shared.delegate as? AppDelegate and environmentObject
             return (isActiveHand ? "Dealer Wins" : "", 0) // Loss: no payout, bet already deducted
         } else if dealerHand.isBust {
             gameStats.recordPlayerWin()
             return (isActiveHand ? "You Win" : "", hand.bet * 2) // Win: bet + winnings
         } else if dealerHand.value > hand.value {
             gameStats.recordPlayerLoss()
+            // Also update global stats for UI
+            // Removed: deleted code accessing UIApplication.shared.delegate as? AppDelegate and environmentObject
             return (isActiveHand ? "Dealer Wins" : "", 0) // Loss: no payout, bet already deducted
         } else if dealerHand.value < hand.value {
             gameStats.recordPlayerWin()
@@ -761,6 +805,8 @@ class BlackjackGame: ObservableObject {
         }
         
         gameState = .gameOver
+        
+        // Removed: Do not show rewarded ad automatically after game ends
     }
 
     func doubleDownBet() {
@@ -782,24 +828,7 @@ class BlackjackGame: ObservableObject {
         }
     }
 
-    func reset() {
-        gameState = .betting
-        playerHand.clear()
-        dealerHand.clear()
-        resultMessage = ""
-        currentBet = 0
-        payout = 0
-        insuranceResult = nil
-        
-        // Reset split manager
-        splitManager.reset()
-        
-        // Reset legacy split data
-        hands.removeAll()
-        activeHandIndex = 0
-        splitBets.removeAll()
-        splitResults.removeAll()
-    }
+    // ...existing code...
     
     // Enhanced game flow methods
     func isUsingSplitManager() -> Bool {
@@ -915,6 +944,8 @@ class BlackjackGame: ObservableObject {
         payout = totalPayout
         resultMessage = splitResults.joined(separator: "\n")
         gameState = .gameOver
+        
+        // Removed: Do not show rewarded ad automatically after legacy split game ends
     }
 
     // Add this function to support stepwise dealer play for animation
@@ -933,3 +964,4 @@ class BlackjackGame: ObservableObject {
         return done
     }
 }
+

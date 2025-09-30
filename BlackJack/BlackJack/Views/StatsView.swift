@@ -5,6 +5,10 @@ struct StatsView: View {
     @EnvironmentObject var gameState: GameState
     @Environment(\.dismiss) private var dismiss
     
+    @State private var showHeader = false
+    @State private var showContent = false
+    @State private var showBack = false
+    
     var body: some View {
         ZStack {
             // Background matching the game theme
@@ -24,6 +28,7 @@ struct StatsView: View {
                             .foregroundColor(.white)
                     }
                     .padding(.top, 20)
+                    .smoothEntrance(visible: showHeader, offset: 14, scale: 0.98, delay: 0.05)
                     
                     // Stats content
                     VStack(spacing: 20) {
@@ -133,6 +138,7 @@ struct StatsView: View {
                         }
                     }
                     .padding(.horizontal, 20)
+                    .smoothEntrance(visible: showContent, offset: 16, scale: 0.985, delay: 0.12)
                     
                     Spacer(minLength: 40)
                 }
@@ -168,9 +174,15 @@ struct StatsView: View {
                 }
                 .padding(.top, 10)
                 .padding(.leading, 20)
+                .smoothEntrance(visible: showBack, offset: -10, scale: 1.0, delay: 0.18, animation: .easeOut(duration: 0.5))
                 Spacer()
             }
         )
+        .onAppear {
+            withAnimation { showHeader = true }
+            withAnimation { showContent = true }
+            withAnimation { showBack = true }
+        }
     }
     
     @ViewBuilder

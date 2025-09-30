@@ -20,6 +20,13 @@ public class GameState: ObservableObject {
     
     public init() {
         loadSavedData()
+        NotificationCenter.default.addObserver(self, selector: #selector(handleChipsPurchased(_:)), name: NSNotification.Name("ChipsPurchased"), object: nil)
+    }
+
+    @objc private func handleChipsPurchased(_ notification: Notification) {
+        if let userInfo = notification.userInfo, let amount = userInfo["amount"] as? Int {
+            addFunds(Double(amount))
+        }
     }
     
     // MARK: - Data Persistence

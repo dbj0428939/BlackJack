@@ -1,5 +1,6 @@
 import SwiftUI
 import Foundation
+import GoogleMobileAds
 
 struct MainMenuView: View {
     @EnvironmentObject var gameState: GameState
@@ -14,8 +15,18 @@ struct MainMenuView: View {
     @State private var aceScale: CGFloat = 0.1
     @State private var menuOffset: CGFloat = 100
     @State private var menuOpacity: Double = 0
+    @State private var showTitle: Bool = false
+    @State private var showBalance: Bool = false
+    @State private var showButtons: Bool = false
+    @State private var showAttribution: Bool = false
+    @State private var showSpade: Bool = false
     @StateObject private var game = BlackjackGame()
     @State private var betAmount: Int = 0
+    
+    // Play Game transition state
+    @State private var showPlayTransition: Bool = false
+    @State private var playZoom: Bool = false
+    
     let chipValues = [10, 25, 50, 100]
     
     var body: some View {
@@ -64,8 +75,10 @@ struct MainMenuView: View {
                             .shadow(color: Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.6), radius: 12, x: 0, y: 6)
                             .scaleEffect(acePulse)
                     }
-                    .opacity(0.6) // Make it subtle as background element
+                    .opacity(showSpade ? 0.6 : 0) // Make it subtle as background element
+                    .scaleEffect(showSpade ? 1.0 : 0.96)
                     .offset(y: 50) // Position it slightly lower
+                    .animation(.spring(response: 0.7, dampingFraction: 0.9), value: showSpade)
                     
                     Spacer()
                     
@@ -108,39 +121,43 @@ struct MainMenuView: View {
                                 .font(.system(size: 32, weight: .medium, design: .rounded))
                                 .foregroundColor(.white.opacity(0.8))
                         }
-                        .opacity(menuOpacity)
-                        .offset(y: menuOffset)
+                        .opacity(showTitle ? 1 : 0)
+                        .offset(y: showTitle ? 0 : 10)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.9), value: showTitle)
                         
                         // Balance
                         HStack(spacing: 12) {
                             Image(systemName: "dollarsign.circle.fill")
-                                .font(.system(size: 20))
+                                .font(.system(size: 22))
                                 .foregroundColor(.green)
                             
                             Text("$\(String(format: "%.0f", gameState.balance))")
-                                .font(.system(size: 18, weight: .semibold))
+                                .font(.system(size: 20, weight: .semibold))
                                 .foregroundColor(.white)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.7)
                             
                             Button(action: { showingAddFunds = true }) {
                                 Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 20))
+                                    .font(.system(size: 22))
                                     .foregroundColor(.green)
                             }
                         }
-                        .padding(.horizontal, 20)
-                        .padding(.vertical, 12)
+                        .padding(.horizontal, 28)
+                        .padding(.vertical, 14)
                         .background(
-                            RoundedRectangle(cornerRadius: 12)
+                            RoundedRectangle(cornerRadius: 14)
                                 .fill(Color.black.opacity(0.3))
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 12)
-                                        .stroke(Color.green.opacity(0.3), lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: 14)
+                                        .stroke(Color.green.opacity(0.3), lineWidth: 1.5)
                                 )
                         )
-                        .opacity(menuOpacity)
-                        .offset(y: menuOffset)
+                        .frame(minWidth: 220)
+                        .opacity(showBalance ? 1 : 0)
+                        .offset(y: showBalance ? 0 : 10)
+                        .scaleEffect(showBalance ? 1 : 0.98)
+                        .animation(.spring(response: 0.6, dampingFraction: 0.85), value: showBalance)
                         
                         // Menu Buttons
                         VStack(spacing: 16) {
@@ -152,10 +169,32 @@ struct MainMenuView: View {
                                 action: {
                                     if gameState.balance > 0 {
                                         SoundManager.shared.playButtonTap()
-                                        showingGame = true
+                                        InterstitialAdManager.shared.showAdIfAvailable()
+                                        
+                                        // Animate a quick branded transition before presenting the game
+                                        showPlayTransition = true
+                                        playZoom = false
+                                        
+                                        // Kick off zoom animation
+                                        DispatchQueue.main.async {
+                                            withAnimation(.easeInOut(duration: 0.65)) {
+                                                playZoom = true
+                                            }
+                                        }
+                                        
+                                        // Present game after the transition completes
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.68) {
+                                            showingGame = true
+                                            // Reset transition state
+                                            showPlayTransition = false
+                                            playZoom = false
+                                        }
                                     }
                                 }
                             )
+                            .opacity(showButtons ? 1 : 0)
+                            .offset(y: showButtons ? 0 : 16)
+                            .animation(.spring(response: 0.7, dampingFraction: 0.85).delay(0.05), value: showButtons)
                             
                             // Statistics
                             ModernButton(
@@ -167,6 +206,9 @@ struct MainMenuView: View {
                                     showingStats = true
                                 }
                             )
+                            .opacity(showButtons ? 1 : 0)
+                            .offset(y: showButtons ? 0 : 16)
+                            .animation(.spring(response: 0.7, dampingFraction: 0.85).delay(0.12), value: showButtons)
                             
                             // Settings
                             ModernButton(
@@ -178,9 +220,10 @@ struct MainMenuView: View {
                                     showingSettings = true
                                 }
                             )
+                            .opacity(showButtons ? 1 : 0)
+                            .offset(y: showButtons ? 0 : 16)
+                            .animation(.spring(response: 0.7, dampingFraction: 0.85).delay(0.19), value: showButtons)
                         }
-                        .opacity(menuOpacity)
-                        .offset(y: menuOffset)
                         
                         // Icons8 Attribution
                         HStack {
@@ -191,14 +234,68 @@ struct MainMenuView: View {
                                 .font(.caption)
                                 .foregroundColor(.white.opacity(0.4))
                         }
-                        .opacity(menuOpacity)
-                        .offset(y: menuOffset)
+                        .opacity(showAttribution ? 1 : 0)
+                        .offset(y: showAttribution ? 0 : 8)
+                        .animation(.easeOut(duration: 0.5), value: showAttribution)
                     }
                     .padding(.horizontal, 24)
                     .padding(.bottom, 40)
+                    
+                    // Banner Ad
+                    BannerAdView()
+                        .frame(width: 320, height: 50)
+                        .padding(.bottom, 20)
                 }
             }
         }
+        .overlay(
+            Group {
+                if showPlayTransition {
+                    ZStack {
+                        // Dimmed backdrop
+                        Color.black.opacity(0.35)
+                            .ignoresSafeArea()
+                        
+                        // Subtle glow
+                        Circle()
+                            .fill(
+                                RadialGradient(
+                                    colors: [
+                                        Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.20),
+                                        Color.clear
+                                    ],
+                                    center: .center,
+                                    startRadius: 0,
+                                    endRadius: 140
+                                )
+                            )
+                            .frame(width: 260, height: 260)
+                            .scaleEffect(playZoom ? 1.15 : 0.9)
+                            .animation(.easeInOut(duration: 0.65), value: playZoom)
+                        
+                        // Gold spade zoom
+                        Image(systemName: "suit.spade.fill")
+                            .font(.system(size: 110))
+                            .foregroundStyle(
+                                LinearGradient(
+                                    gradient: Gradient(colors: [
+                                        Color(red: 1.0, green: 0.84, blue: 0.0),
+                                        Color(red: 0.8, green: 0.5, blue: 0.2)
+                                    ]),
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                )
+                            )
+                            .shadow(color: .yellow.opacity(0.25), radius: 10)
+                            .scaleEffect(playZoom ? 5.8 : 0.92)
+                            .opacity(playZoom ? 0.0 : 1.0)
+                            .animation(.easeInOut(duration: 0.65), value: playZoom)
+                    }
+                    .transition(.opacity)
+                    .allowsHitTesting(false)
+                }
+            }
+        )
         .sheet(isPresented: $showingAddFunds) {
             EnhancedAddFundsView()
                 .environmentObject(gameState)
@@ -219,21 +316,35 @@ struct MainMenuView: View {
     }
     
     private func startLoadingAnimation() {
-        // Start with ace scaling
-        withAnimation(.easeOut(duration: 1.5)) {
-            aceScale = 1.0
-        }
-        
         // Start subtle pulsing animation
         withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
             acePulse = 1.1
         }
         
-        // After ace animation, show menu content
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-            withAnimation(.easeOut(duration: 0.8)) {
-                menuOffset = 0
-                menuOpacity = 1.0
+        // Staggered entrances for smoother feel
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) {
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.9)) {
+                showSpade = true
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.9)) {
+                showTitle = true
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.40) {
+            withAnimation(.spring(response: 0.6, dampingFraction: 0.85)) {
+                showBalance = true
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.55) {
+            withAnimation(.spring(response: 0.7, dampingFraction: 0.85)) {
+                showButtons = true
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.70) {
+            withAnimation(.easeOut(duration: 0.5)) {
+                showAttribution = true
             }
         }
     }
@@ -268,35 +379,39 @@ struct ModernButton: View {
             .frame(maxWidth: 280)
             .frame(height: 50)
             .background(
-                RoundedRectangle(cornerRadius: 16)
-                    .fill(
-                        isEnabled ? 
-                        LinearGradient(
-                            colors: [
-                                Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.2),
-                                Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        ) :
-                        LinearGradient(
-                            colors: [
-                                Color.gray.opacity(0.2),
-                                Color.gray.opacity(0.1)
-                            ],
-                            startPoint: .topLeading,
-                            endPoint: .bottomTrailing
-                        )
-                    )
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 16)
-                            .stroke(
-                                isEnabled ? 
-                                Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.4) :
-                                Color.gray.opacity(0.3),
-                                lineWidth: 1
+                ZStack {
+                    // Main button background with deeper gold gradient
+                    RoundedRectangle(cornerRadius: 16)
+                        .fill(
+                            isEnabled ?
+                            LinearGradient(
+                                colors: [
+                                    Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.25),
+                                    Color(red: 0.8, green: 0.6, blue: 0.0).opacity(0.15)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ) :
+                            LinearGradient(
+                                colors: [
+                                    Color.gray.opacity(0.2),
+                                    Color.gray.opacity(0.1)
+                                ],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
                             )
-                    )
+                        )
+                    
+                    // Outer gold border with shimmer effect
+                    RoundedRectangle(cornerRadius: 16)
+                        .stroke(
+                            isEnabled ?
+                            Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.8) :
+                            Color.gray.opacity(0.3),
+                            lineWidth: 1.5
+                        )
+                        .shadow(color: isEnabled ? Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.3) : .clear, radius: 4, x: 0, y: 0)
+                }
             )
             .scaleEffect(isPressed ? 0.98 : 1.0)
             .animation(.easeInOut(duration: 0.1), value: isPressed)
