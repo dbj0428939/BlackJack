@@ -3,7 +3,7 @@ import SwiftUI
 struct LoadingView: View {
     @State private var rotation: Double = 0
     @State private var pulseScale: CGFloat = 1.0
-    @State private var glowIntensity: CGFloat = 0.8
+    @State private var glowIntensity: CGFloat = 0.5 // Reduced baseline intensity
     @State private var backgroundOpacity: Double = 1.0
     @State private var isActive = false
     @State private var showTransition = false
@@ -63,53 +63,7 @@ struct LoadingView: View {
                         )
                 }
                 
-                // Center gold spade with glow and rotation
-                ZStack {
-                    // Reduced or removed glow effect
-                    Circle()
-                        .fill(
-                            RadialGradient(
-                                gradient: Gradient(colors: [
-                                    Color.yellow.opacity(0.25 * glowIntensity), // Lowered opacity
-                                    Color.orange.opacity(0.15 * glowIntensity), // Lowered opacity
-                                    Color.red.opacity(0.0)
-                                ]),
-                                center: .center,
-                                startRadius: 0,
-                                endRadius: 100 // Reduced radius for less spread
-                            )
-                        )
-                        .frame(width: 180, height: 180) // Reduced size
-                        .scaleEffect(pulseScale)
-                        .animation(
-                            Animation.easeInOut(duration: 1.5)
-                                .repeatForever(autoreverses: true),
-                            value: pulseScale
-                        )
-                    
-                    // Gold spade with transition
-                    Image(systemName: "suit.spade.fill")
-                        .font(.system(size: 100))
-                        .foregroundStyle(
-                            LinearGradient(
-                                gradient: Gradient(colors: [
-                                    Color(red: 1.0, green: 0.84, blue: 0.0), // Gold
-                                    Color(red: 0.8, green: 0.5, blue: 0.2)   // Darker gold
-                                ]),
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .shadow(color: .yellow.opacity(0.25), radius: 8, x: 0, y: 0) // Reduced shadow
-                        .rotationEffect(.degrees(rotation))
-                        .scaleEffect(showTransition ? 6.0 : 1.0)
-                        .opacity(showTransition ? 0 : 1.0)
-                        .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: rotation)
-                        .animation(.easeInOut(duration: 0.9), value: showTransition)
-                }
-                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
-                .opacity(backgroundOpacity)
-                .onAppear(perform: startLoadingAnimation)
+                // Spade will be added as a centered overlay below (keeps backgrounds/layout separate)
                 
                 NavigationLink(
                     destination: MainMenuView().navigationBarHidden(true),
@@ -118,6 +72,47 @@ struct LoadingView: View {
                 )
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
+            .overlay(
+                ZStack {
+                    Circle()
+                        .fill(
+                            RadialGradient(
+                                gradient: Gradient(colors: [
+                                    Color.yellow.opacity(0.12 * glowIntensity),
+                                    Color.orange.opacity(0.06 * glowIntensity),
+                                    Color.clear
+                                ]),
+                                center: .center,
+                                startRadius: 0,
+                                endRadius: 70
+                            )
+                        )
+                        .frame(width: 140, height: 140)
+
+                    Image(systemName: "suit.spade.fill")
+                        .font(.system(size: 96))
+                        .foregroundStyle(
+                            LinearGradient(
+                                gradient: Gradient(colors: [
+                                    Color(red: 1.0, green: 0.84, blue: 0.0),
+                                    Color(red: 0.8, green: 0.5, blue: 0.2)
+                                ]),
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .shadow(color: .yellow.opacity(0.15), radius: 4, x: 0, y: 0)
+                        .rotationEffect(.degrees(rotation))
+                        .scaleEffect(showTransition ? 6.0 : 1.0)
+                        .opacity(showTransition ? 0 : 1.0)
+                        .animation(Animation.linear(duration: 8).repeatForever(autoreverses: false), value: rotation)
+                        .animation(.easeInOut(duration: 0.9), value: showTransition)
+                }
+                .frame(width: 140, height: 140)
+                .opacity(backgroundOpacity)
+                .onAppear(perform: startLoadingAnimation),
+                alignment: .center
+            )
             .navigationBarHidden(true)
         }
         .statusBar(hidden: true)
@@ -125,12 +120,11 @@ struct LoadingView: View {
     }
     
     private func startLoadingAnimation() {
-        withAnimation(Animation.easeInOut(duration: 1.5).repeatForever(autoreverses: true)) {
-            pulseScale = 1.2
-            glowIntensity = 1.0
-        }
-        withAnimation(Animation.linear(duration: 8).repeatForever(autoreverses: false)) {
-            rotation = 360
+        // Start rotation after layout is settled to avoid initial top-left placement
+        DispatchQueue.main.async {
+            withAnimation(Animation.linear(duration: 8).repeatForever(autoreverses: false)) {
+                rotation = 360
+            }
         }
         
         // Simulate loading time (slightly longer), then perform zoom transition before navigating

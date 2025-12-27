@@ -6,16 +6,11 @@
 //
 
 import SwiftUI
-import GoogleMobileAds
+
 
 @main
-struct BlackJackApp: App {
+struct SpadeBetApp: App {
     @StateObject private var gameState = GameState()
-    
-    init() {
-        // Initialize the Google Mobile Ads SDK
-        MobileAds.shared.start()
-    }
     
     var body: some Scene {
         WindowGroup {

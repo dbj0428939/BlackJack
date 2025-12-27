@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>SpadeBet.ipa</key>
+	<array>
+		<dict>
+			<key>architectures</key>
+			<array>
+				<string>arm64</string>
+			</array>
+			<key>buildNumber</key>
+			<string>1</string>
+			<key>certificate</key>
+			<dict>
+				<key>SHA1</key>
+				<string>957479B08D2921A642756863F1A694B7404B0638</string>
+				<key>dateExpires</key>
+				<string>3/14/26</string>
+				<key>type</key>
+				<string>Cloud Managed Apple Distribution</string>
+			</dict>
+			<key>embeddedBinaries</key>
+			<array>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>12110</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>957479B08D2921A642756863F1A694B7404B0638</string>
+						<key>dateExpires</key>
+						<string>3/14/26</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>GoogleMobileAds.framework</string>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>LMQB65W6T8</string>
+						<key>name</key>
+						<string>David Johnson</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>12.11.0</string>
+				</dict>
+				<dict>
+					<key>architectures</key>
+					<array>
+						<string>arm64</string>
+					</array>
+					<key>buildNumber</key>
+					<string>1</string>
+					<key>certificate</key>
+					<dict>
+						<key>SHA1</key>
+						<string>957479B08D2921A642756863F1A694B7404B0638</string>
+						<key>dateExpires</key>
+						<string>3/14/26</string>
+						<key>type</key>
+						<string>Cloud Managed Apple Distribution</string>
+					</dict>
+					<key>name</key>
+					<string>UserMessagingPlatform.framework</string>
+					<key>symbols</key>
+					<true/>
+					<key>team</key>
+					<dict>
+						<key>id</key>
+						<string>LMQB65W6T8</string>
+						<key>name</key>
+						<string>David Johnson</string>
+					</dict>
+					<key>versionNumber</key>
+					<string>3.0.0</string>
+				</dict>
+			</array>
+			<key>entitlements</key>
+			<dict>
+				<key>application-identifier</key>
+				<string>LMQB65W6T8.dave.b.BlackJack</string>
+				<key>beta-reports-active</key>
+				<true/>
+				<key>com.apple.developer.team-identifier</key>
+				<string>LMQB65W6T8</string>
+				<key>get-task-allow</key>
+				<false/>
+			</dict>
+			<key>name</key>
+			<string>SpadeBet.app</string>
+			<key>profile</key>
+			<dict>
+				<key>UUID</key>
+				<string>b6690f44-6609-4501-8964-83a4840a4526</string>
+				<key>dateExpires</key>
+				<string>3/14/26</string>
+				<key>name</key>
+				<string>iOS Team Store Provisioning Profile: dave.b.BlackJack</string>
+			</dict>
+			<key>symbols</key>
+			<true/>
+			<key>team</key>
+			<dict>
+				<key>id</key>
+				<string>LMQB65W6T8</string>
+				<key>name</key>
+				<string>David Johnson</string>
+			</dict>
+			<key>versionNumber</key>
+			<string>1.0</string>
+		</dict>
+	</array>
+</dict>
+</plist>

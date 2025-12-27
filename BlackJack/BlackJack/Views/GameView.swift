@@ -1,7 +1,6 @@
 import AVFoundation
 import SwiftUI
 import Foundation
-import GoogleMobileAds
 
 // MARK: - Split Collapse Transition Overlay
 struct SplitCollapseTransitionOverlay: View {
@@ -239,6 +238,11 @@ struct GameView: View {
     @State private var isPulsing = true  // New state for stable pulsing animation
     @State private var handIconPosition = CGSize.zero  // Add back the missing state variable
     @State private var handIconRotation: Double = 0
+    // Betting view animations
+    @State private var showPlaceBet: Bool = false
+    @State private var placeBetPulse: Bool = false
+    @State private var betAmountShinePhase: CGFloat = -1.0
+    @State private var betAmountShineGlow: CGFloat = 1.0
     @State private var animatedBalance: Double = 0
     @State private var showBalanceChange: Bool = false
     @State private var balanceChangeAmount: Double = 0
@@ -249,28 +253,13 @@ struct GameView: View {
     @State private var holeCardPeekOffset: CGFloat = 0
     @State private var chipAnimations: [Int: Bool] = [:] // Track chip animations by value
     
-    // Interstitial Ad
-    @State private var interstitial: InterstitialAd?
+    // Ads disabled: interstitial ad handling removed
+    @State private var interstitialLoaded: Bool = false
     private let interstitialAdUnitID = "ca-app-pub-4504051516226977/8440598650"
-    
+
     private func loadAndShowAd() {
-        print("Loading ad...")
-        let request = Request()
-        InterstitialAd.load(with: interstitialAdUnitID, request: request) { ad, error in
-            DispatchQueue.main.async {
-                if let error = error {
-                    print("Failed to load ad: \(error)")
-                    return
-                }
-                print("Ad loaded successfully")
-                self.interstitial = ad
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let rootViewController = windowScene.windows.first?.rootViewController {
-                    print("Presenting ad...")
-                    ad?.present(from: rootViewController)
-                }
-            }
-        }
+        // No-op: ads are disabled in this build
+        print("Ads disabled: loadAndShowAd skipped.")
     }
     @State private var animatingChips: [AnimatingChip] = [] // Track flying chips
     @State private var navigateToStats = false // Track navigation to stats screen
@@ -1000,11 +989,7 @@ struct GameView: View {
                         }
                     }
                 }
-                // Trigger interstitial ad after each hand is completed
-                if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-                   let rootVC = windowScene.windows.first?.rootViewController {
-                    AdMobManager.shared.incrementHandsPlayedAndShowInterstitialIfNeeded(presentingViewController: rootVC)
-                }
+                // Ads removed: interstitial triggers disabled
             }
         }
         .onChange(of: game.shouldAutoDeal) { _, shouldDeal in
@@ -1562,12 +1547,19 @@ struct GameView: View {
     private var bettingInterfaceView: some View {
         VStack(spacing: 12) {
             VStack(spacing: 8) {
+                // PLACE YOUR BET - entrance then subtle pulse
                 Text("PLACE YOUR BET")
-                    .font(.system(size: 24, weight: .black, design: .rounded))
+                    .font(.system(size: 26, weight: .black, design: .rounded))
                     .foregroundColor(.white)
                     .tracking(2.0)
                     .shadow(color: Color.black.opacity(0.8), radius: 4, x: 0, y: 2)
-                
+                    .scaleEffect(showPlaceBet ? (placeBetPulse ? 1.04 : 1.0) : 0.9)
+                    .rotation3DEffect(.degrees(showPlaceBet ? 0 : 18), axis: (x: 1, y: 0, z: 0))
+                    .offset(y: showPlaceBet ? 0 : 18)
+                    .opacity(showPlaceBet ? 1 : 0)
+                    .shadow(color: Color.black.opacity(showPlaceBet ? 0.6 : 0.0), radius: showPlaceBet ? 6 : 0, x: 0, y: 2)
+                    .animation(.interpolatingSpring(stiffness: 220, damping: 18), value: showPlaceBet)
+
                 Text("Select your chip amount below")
                     .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundColor(.white.opacity(0.7))
@@ -1575,6 +1567,25 @@ struct GameView: View {
             }
             .padding(.top, 40)
             .padding(.horizontal, 20)
+            .onAppear {
+                // Entrance animation when betting interface appears
+                withAnimation(.interpolatingSpring(stiffness: 220, damping: 18)) {
+                    showPlaceBet = true
+                }
+                // Start subtle repeating pulse after entrance
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                    withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                        placeBetPulse = true
+                    }
+                }
+                // Start shine on the bet amount (balance) while in betting state
+                withAnimation(.linear(duration: 2.0).repeatForever(autoreverses: false)) {
+                    betAmountShinePhase = 1.0
+                }
+                withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                    betAmountShineGlow = 1.2
+                }
+            }
             
             Spacer()
             
@@ -3307,6 +3318,7 @@ struct GameView: View {
                         .offset(y: -2) // Move up slightly
                     }
                     
+                    // Balance amount with optional shine while in betting state
                     Text("$\(String(format: "%.0f", animatedBalance))")
                         .font(.system(size: 24, weight: .black, design: .rounded))
                         .foregroundColor(.white)
@@ -3316,6 +3328,30 @@ struct GameView: View {
                         .minimumScaleFactor(0.6)
                         .frame(maxWidth: .infinity, alignment: .center)
                         .offset(x: game.gameState != .betting ? -10 : 0) // Shift left
+                        .overlay(
+                            // only visible effect while betting
+                            Group {
+                                if game.gameState == .betting {
+                                    LinearGradient(
+                                        gradient: Gradient(stops: [
+                                            .init(color: Color.white.opacity(0.0), location: 0.0),
+                                            .init(color: Color.white.opacity(0.9), location: 0.5),
+                                            .init(color: Color.white.opacity(0.0), location: 1.0)
+                                        ]),
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    )
+                                    .frame(width: 240, height: 36)
+                                    .rotationEffect(.degrees(14))
+                                    .offset(x: betAmountShinePhase * 240)
+                                    .blendMode(.screen)
+                                    .mask(
+                                        Text("$\(String(format: "%.0f", animatedBalance))")
+                                            .font(.system(size: 24, weight: .black, design: .rounded))
+                                    )
+                                }
+                            }
+                        )
                     
                     // Add spacer to balance the + icon on the left for perfect centering
                     if game.gameState != .betting {
@@ -4621,26 +4657,10 @@ struct EnhancedAddFundsView: View {
     }
     
     private func watchAdForChips() {
-        print("🎯 AdMob: watchAdForChips called")
-        
-        // Check ad status first
-    // No checkAdStatus in AdMobManager; ad status is tracked by isAdLoaded
-        
-        // Ad status is tracked by isAdLoaded
-        guard AdMobManager.shared.isAdLoaded else {
-            print("🎯 AdMob: Ad not ready, showing fallback message")
-            purchaseSuccessMessage = "Ad is loading. Please wait a moment and try again."
-            showPurchaseSuccess = true
-            return
-        }
-        isWatchingAd = true
-        AdMobManager.shared.showRewardedAd(onReward: {
-            self.gameState.addFunds(Double(self.selectedOption.chipAmount))
-            self.purchaseSuccessMessage = "You received \(self.selectedOption.chipAmount) chips!"
-            self.showPurchaseSuccess = true
-            self.isWatchingAd = false
-            print("🎯 AdMob: Coins awarded successfully!")
-        })
+        // Ads removed: show a friendly fallback message instead of playing ads
+        purchaseSuccessMessage = "Ad-based rewards are disabled in this build."
+        showPurchaseSuccess = true
+        isWatchingAd = false
     }
 // ...existing code...
 
@@ -4706,17 +4726,11 @@ struct AddFundsOptionView: View {
 
     private var adStatusView: some View {
         Group {
-            if option == .watchAd && !AdMobManager.shared.canShowAd {
-                if AdMobManager.shared.adLoadingElapsed < 10 {
-                    ProgressView()
-                        .progressViewStyle(CircularProgressViewStyle(tint: .white))
-                        .frame(width: 24, height: 24)
-                } else {
-                    Text("Try Again")
-                        .font(.caption)
-                        .foregroundColor(.white)
-                        .padding(.leading, 8)
-                }
+            if option == .watchAd {
+                Text("Disabled")
+                    .font(.caption)
+                    .foregroundColor(.white)
+                    .padding(.leading, 8)
             }
         }
     }

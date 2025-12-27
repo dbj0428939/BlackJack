@@ -1,9 +1,5 @@
-    // Track hands played for interstitial ad logic
-        // Remove duplicate handsPlayed property
 import Foundation
 import SwiftUI
-import SwiftUI
-import GoogleMobileAds
 
 // All model types (Hand, Deck, GameStats, SplitGameManager, SplitHand, Rank) are defined
 // in separate files within the same module and should be automatically available
@@ -41,9 +37,6 @@ class BlackjackGame: ObservableObject {
     
     // Enhanced split functionality
     @Published public var splitManager = SplitGameManager()
-    
-    // AdMob integration
-    private let adMobManager = AdMobManager.shared
     
     // Legacy split properties for backward compatibility
     @Published public var hands: [Hand] = []  // All player hands

@@ -1,0 +1,69 @@
+Command line invocation:
+    /Applications/Xcode.app/Contents/Developer/usr/bin/xcodebuild -workspace BlackJack.xcworkspace -scheme BlackJack -configuration Debug build
+
+Resolve Package Graph
+
+
+Resolved source packages:
+  GoogleUserMessagingPlatform: https://github.com/googleads/swift-package-manager-google-user-messaging-platform.git @ 3.0.0
+  GoogleMobileAds: https://github.com/googleads/swift-package-manager-google-mobile-ads.git @ 12.11.0
+
+ComputePackagePrebuildTargetDependencyGraph
+
+Prepare packages
+
+CreateBuildRequest
+
+SendProjectDescription
+
+CreateBuildOperation
+
+ComputeTargetDependencyGraph
+note: Building targets in dependency order
+note: Target dependency graph (10 targets)
+    Target 'BlackJack' in project 'BlackJack'
+        ➜ Implicit dependency on target 'Pods-BlackJack' in project 'Pods' via file 'Pods_BlackJack.framework' in build phase 'Link Binary'
+        ➜ Implicit dependency on target 'Google-Mobile-Ads-SDK' in project 'Pods' via options '-framework Google_Mobile_Ads_SDK' in build setting 'OTHER_LDFLAGS'
+        ➜ Explicit dependency on target 'GoogleMobileAds' in project 'GoogleMobileAds'
+    Target 'GoogleMobileAds' in project 'GoogleMobileAds'
+        ➜ Explicit dependency on target 'GoogleMobileAdsTarget' in project 'GoogleMobileAds'
+        ➜ Explicit dependency on target 'GoogleUserMessagingPlatform' in project 'GoogleUserMessagingPlatform'
+    Target 'GoogleMobileAdsTarget' in project 'GoogleMobileAds'
+        ➜ Explicit dependency on target 'GoogleUserMessagingPlatform' in project 'GoogleUserMessagingPlatform'
+    Target 'GoogleUserMessagingPlatform' in project 'GoogleUserMessagingPlatform'
+        ➜ Explicit dependency on target 'UserMessagingPlatformTarget' in project 'GoogleUserMessagingPlatform'
+    Target 'UserMessagingPlatformTarget' in project 'GoogleUserMessagingPlatform' (no dependencies)
+    Target 'Pods-BlackJack' in project 'Pods'
+        ➜ Explicit dependency on target 'Google-Mobile-Ads-SDK' in project 'Pods'
+        ➜ Explicit dependency on target 'GoogleUserMessagingPlatform' in project 'Pods'
+    Target 'Google-Mobile-Ads-SDK' in project 'Pods'
+        ➜ Explicit dependency on target 'Google-Mobile-Ads-SDK-GoogleMobileAdsResources' in project 'Pods'
+        ➜ Explicit dependency on target 'GoogleUserMessagingPlatform' in project 'Pods'
+    Target 'GoogleUserMessagingPlatform' in project 'Pods'
+        ➜ Explicit dependency on target 'GoogleUserMessagingPlatform-UserMessagingPlatformResources' in project 'Pods'
+    Target 'GoogleUserMessagingPlatform-UserMessagingPlatformResources' in project 'Pods' (no dependencies)
+    Target 'Google-Mobile-Ads-SDK-GoogleMobileAdsResources' in project 'Pods' (no dependencies)
+
+GatherProvisioningInputs
+
+CreateBuildDescription
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -x c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang -v -E -dM -arch arm64 -isysroot /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS26.1.sdk -x objective-c -c /dev/null
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/swiftc --version
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --print-asset-tag-combinations --output-format xml1 /Users/davidjohnson/Desktop/BlackJack/BlackJack/BlackJack/Assets.xcassets
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld -version_details
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool -V
+
+ExecuteExternalTool /Applications/Xcode.app/Contents/Developer/usr/bin/actool --version --output-format xml1
+
+Build description signature: bc12ae51496a3414def4c7503df01cb0
+Build description path: /Users/davidjohnson/Library/Developer/Xcode/DerivedData/BlackJack-aeyvrglsgrwaeraxkexltgqsnhqh/Build/Intermediates.noindex/XCBuildData/bc12ae51496a3414def4c7503df01cb0.xcbuilddata
+/Users/davidjohnson/Desktop/BlackJack/BlackJack/BlackJack.xcodeproj: error: Provisioning profile "iOS Team Provisioning Profile: dave.b.BlackJack" doesn't include the currently selected device "David’s MacBook Pro" (identifier 00006020-0014495A0AC3C01E). (in target 'BlackJack' from project 'BlackJack')

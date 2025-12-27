@@ -1,6 +1,5 @@
 import SwiftUI
 import Foundation
-import GoogleMobileAds
 
 struct MainMenuView: View {
     @EnvironmentObject var gameState: GameState
@@ -16,12 +15,18 @@ struct MainMenuView: View {
     @State private var menuOffset: CGFloat = 100
     @State private var menuOpacity: Double = 0
     @State private var showTitle: Bool = false
+    @State private var shinePhase: CGFloat = -1.0
+    @State private var shineGlow: CGFloat = 1.0
     @State private var showBalance: Bool = false
     @State private var showButtons: Bool = false
     @State private var showAttribution: Bool = false
     @State private var showSpade: Bool = false
+    @State private var aceAnimate: Bool = false
+    @State private var aceOffset: CGFloat = 0
     @StateObject private var game = BlackjackGame()
     @State private var betAmount: Int = 0
+    @State private var showBlackjack: Bool = false
+    @State private var blackjackPulse: Bool = false
     
     // Play Game transition state
     @State private var showPlayTransition: Bool = false
@@ -37,94 +42,123 @@ struct MainMenuView: View {
                     .ignoresSafeArea()
                 
                 VStack(spacing: 0) {
-                    Spacer()
-                    
-                    
-                    // Big Gold Spade (from loading screen)
-                    ZStack {
-                        // Glow effect
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    colors: [
-                                        Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.2),
-                                        Color.clear
-                                    ],
-                                    center: .center,
-                                    startRadius: 0,
-                                    endRadius: 150
-                                )
-                            )
-                            .frame(width: 300, height: 300)
-                            .scaleEffect(acePulse)
-                        
-                        // Gold spade
-                        Image(systemName: "suit.spade.fill")
-                            .font(.system(size: 120))
-                            .foregroundStyle(
-                                LinearGradient(
-                                    gradient: Gradient(colors: [
-                                        Color(red: 1.0, green: 0.84, blue: 0.0), // Gold
-                                        Color(red: 0.9, green: 0.7, blue: 0.0),  // Darker gold
-                                        Color(red: 1.0, green: 0.84, blue: 0.0)  // Gold
-                                    ]),
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                )
-                            )
-                            .shadow(color: Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.6), radius: 12, x: 0, y: 6)
-                            .scaleEffect(acePulse)
+                    // Top-aligned title + ace strip — uses GeometryReader
+                    // to apply padding that respects the device safe area.
+                    GeometryReader { topGeo in
+                        VStack(spacing: 10) {
+                            VStack(spacing: 8) {
+                                // Title with shimmer/shine overlay
+                                Text("SpadeBet")
+                                    .font(Font.custom("AvenirNext-Bold", size: 34))
+                                    .foregroundColor(Color(red: 0.95, green: 0.82, blue: 0.30))
+                                    .shadow(color: Color.yellow.opacity(0.22 * Double(shineGlow)), radius: 6 * shineGlow, x: 0, y: 0)
+                                    .overlay(
+                                        // stronger, wider moving highlight masked to the text
+                                        LinearGradient(
+                                            gradient: Gradient(stops: [
+                                                .init(color: Color.white.opacity(0.0), location: 0.0),
+                                                .init(color: Color.white.opacity(0.98), location: 0.5),
+                                                .init(color: Color.white.opacity(0.0), location: 1.0)
+                                            ]),
+                                            startPoint: .leading,
+                                            endPoint: .trailing
+                                        )
+                                        .rotationEffect(.degrees(20))
+                                        .frame(width: 420, height: 56)
+                                        .offset(x: shinePhase * 420)
+                                        .blendMode(.screen)
+                                        .mask(
+                                            Text("SpadeBet")
+                                                .font(Font.custom("AvenirNext-Bold", size: 34))
+                                        )
+                                    )
+                                .opacity(showTitle ? 1 : 0)
+                                .offset(y: showTitle ? 0 : 10)
+                                .animation(.spring(response: 0.6, dampingFraction: 0.9), value: showTitle)
+                                
+                                // Blackjack appears last with a custom entrance animation
+                                Text("Blackjack")
+                                    .font(.system(size: 56, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color.white.opacity(0.98))
+                                    .scaleEffect(showBlackjack ? (blackjackPulse ? 1.04 : 1.0) : 0.8)
+                                    .rotation3DEffect(.degrees(showBlackjack ? 0 : 20), axis: (x: 1, y: 0, z: 0))
+                                    .offset(y: showBlackjack ? 0 : 30)
+                                    .opacity(showBlackjack ? 1 : 0)
+                                    .shadow(color: Color.black.opacity(showBlackjack ? 0.25 : 0.0), radius: 8, x: 0, y: 6)
+                                    .animation(.interpolatingSpring(stiffness: 220, damping: 18), value: showBlackjack)
+                                    .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: blackjackPulse)
+                            }
+                            .opacity(showTitle ? 1 : 0)
+                            .offset(y: showTitle ? 0 : 10)
+                            .animation(.spring(response: 0.6, dampingFraction: 0.9), value: showTitle)
+
+                            // (ace strip relocated below, above balance box)
+                        }
+                        // Slightly larger safe-area offset so the title sits a bit lower
+                        // and is visually centered between the notch and the ace strip.
+                        .padding(.top, topGeo.safeAreaInsets.top + 94)
+                        .frame(maxWidth: .infinity, alignment: .top)
+                        .onAppear {
+                            // start a continuous left->right shine sweep
+                            withAnimation(.linear(duration: 2.2).repeatForever(autoreverses: false)) {
+                                shinePhase = 1.0
+                            }
+                            // subtle pulsing glow to emphasize the shine
+                            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                                shineGlow = 1.25
+                            }
+                            // ensure Golden title shows early
+                            withAnimation(.spring(response: 0.6, dampingFraction: 0.9)) {
+                                showTitle = true
+                            }
+                        }
                     }
-                    .opacity(showSpade ? 0.6 : 0) // Make it subtle as background element
-                    .scaleEffect(showSpade ? 1.0 : 0.96)
-                    .offset(y: 50) // Position it slightly lower
-                    .animation(.spring(response: 0.7, dampingFraction: 0.9), value: showSpade)
-                    
+                    .frame(height: 240)
+
                     Spacer()
-                    
+
                     // Menu Content
                     VStack(spacing: 24) {
-                        // Title
-                        VStack(spacing: 8) {
-                            Text("SpadeBet")
-                                .font(.system(size: 48, weight: .bold, design: .rounded))
-                                .foregroundStyle(
-                                    LinearGradient(
-                                        colors: [
-                                            Color(red: 1.0, green: 0.84, blue: 0.0),
-                                            Color(red: 1.0, green: 0.9, blue: 0.3),
-                                            Color(red: 1.0, green: 0.84, blue: 0.0)
-                                        ],
-                                        startPoint: .topLeading,
-                                        endPoint: .bottomTrailing
-                                    )
-                                )
-                                .shadow(color: Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.6), radius: 8, x: 0, y: 4)
-                                .overlay(
-                                    Text("SpadeBet")
-                                        .font(.system(size: 48, weight: .bold, design: .rounded))
+                        // Title moved to top; menu content begins here
+                        
+                        // Ace strip placed directly above the balance box
+                        GeometryReader { geo in
+                            let aceWidth: CGFloat = 28
+                            let aceSpacing: CGFloat = 36
+                            let count = Int(ceil(geo.size.width / (aceWidth + aceSpacing))) + 6
+                            let oneSetWidth = (aceWidth + aceSpacing) * CGFloat(count)
+
+                            HStack(spacing: aceSpacing) {
+                                ForEach(0..<(count * 2), id: \.self) { _ in
+                                    Image(systemName: "suit.spade.fill")
+                                        .font(.system(size: aceWidth))
                                         .foregroundStyle(
                                             LinearGradient(
-                                                colors: [
-                                                    Color.white.opacity(0.8),
-                                                    Color.white.opacity(0.3),
-                                                    Color.clear
-                                                ],
+                                                gradient: Gradient(colors: [
+                                                    Color(red: 1.0, green: 0.84, blue: 0.0),
+                                                    Color(red: 0.8, green: 0.5, blue: 0.2)
+                                                ]),
                                                 startPoint: .topLeading,
                                                 endPoint: .bottomTrailing
                                             )
                                         )
-                                        .blendMode(.overlay)
-                                )
-                            
-                            Text("Blackjack")
-                                .font(.system(size: 32, weight: .medium, design: .rounded))
-                                .foregroundColor(.white.opacity(0.8))
+                                        .shadow(color: .yellow.opacity(0.12), radius: 2)
+                                }
+                            }
+                            .frame(width: geo.size.width * 1.0, height: 32, alignment: .leading)
+                            .offset(x: aceOffset)
+                            .clipped()
+                            .onAppear {
+                                aceOffset = 0
+                                let duration = Double(oneSetWidth) / 30.0
+                                withAnimation(Animation.linear(duration: duration).repeatForever(autoreverses: false)) {
+                                    aceOffset = -oneSetWidth
+                                }
+                            }
                         }
-                        .opacity(showTitle ? 1 : 0)
-                        .offset(y: showTitle ? 0 : 10)
-                        .animation(.spring(response: 0.6, dampingFraction: 0.9), value: showTitle)
-                        
+                        .frame(height: 32)
+                        .padding(.bottom, 8)
+
                         // Balance
                         HStack(spacing: 12) {
                             Image(systemName: "dollarsign.circle.fill")
@@ -147,10 +181,10 @@ struct MainMenuView: View {
                         .padding(.vertical, 14)
                         .background(
                             RoundedRectangle(cornerRadius: 14)
-                                .fill(Color.black.opacity(0.3))
+                                .fill(Color.black.opacity(0.22))
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 14)
-                                        .stroke(Color.green.opacity(0.3), lineWidth: 1.5)
+                                        .stroke(Color.green.opacity(0.28), lineWidth: 1.2)
                                 )
                         )
                         .frame(minWidth: 220)
@@ -169,7 +203,7 @@ struct MainMenuView: View {
                                 action: {
                                     if gameState.balance > 0 {
                                         SoundManager.shared.playButtonTap()
-                                        InterstitialAdManager.shared.showAdIfAvailable()
+                                        // Interstitials disabled
                                         
                                         // Animate a quick branded transition before presenting the game
                                         showPlayTransition = true
@@ -241,10 +275,7 @@ struct MainMenuView: View {
                     .padding(.horizontal, 24)
                     .padding(.bottom, 40)
                     
-                    // Banner Ad
-                    BannerAdView()
-                        .frame(width: 320, height: 50)
-                        .padding(.bottom, 20)
+                    // Banner area removed (ads disabled)
                 }
             }
         }
@@ -252,42 +283,22 @@ struct MainMenuView: View {
             Group {
                 if showPlayTransition {
                     ZStack {
-                        // Dimmed backdrop
-                        Color.black.opacity(0.35)
+                        Color.black.opacity(0.25)
                             .ignoresSafeArea()
-                        
-                        // Subtle glow
-                        Circle()
-                            .fill(
-                                RadialGradient(
-                                    colors: [
-                                        Color(red: 1.0, green: 0.84, blue: 0.0).opacity(0.20),
-                                        Color.clear
-                                    ],
-                                    center: .center,
-                                    startRadius: 0,
-                                    endRadius: 140
-                                )
-                            )
-                            .frame(width: 260, height: 260)
-                            .scaleEffect(playZoom ? 1.15 : 0.9)
-                            .animation(.easeInOut(duration: 0.65), value: playZoom)
-                        
-                        // Gold spade zoom
                         Image(systemName: "suit.spade.fill")
-                            .font(.system(size: 110))
+                            .font(.system(size: 96))
                             .foregroundStyle(
                                 LinearGradient(
                                     gradient: Gradient(colors: [
-                                        Color(red: 1.0, green: 0.84, blue: 0.0),
-                                        Color(red: 0.8, green: 0.5, blue: 0.2)
+                                        Color(red: 0.95, green: 0.82, blue: 0.30),
+                                        Color(red: 0.80, green: 0.60, blue: 0.20)
                                     ]),
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
                                 )
                             )
-                            .shadow(color: .yellow.opacity(0.25), radius: 10)
-                            .scaleEffect(playZoom ? 5.8 : 0.92)
+                            .shadow(color: .yellow.opacity(0.12), radius: 6)
+                            .scaleEffect(playZoom ? 5.6 : 0.92)
                             .opacity(playZoom ? 0.0 : 1.0)
                             .animation(.easeInOut(duration: 0.65), value: playZoom)
                     }
@@ -316,16 +327,8 @@ struct MainMenuView: View {
     }
     
     private func startLoadingAnimation() {
-        // Start subtle pulsing animation
         withAnimation(.easeInOut(duration: 2.0).repeatForever(autoreverses: true)) {
-            acePulse = 1.1
-        }
-        
-        // Staggered entrances for smoother feel
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) {
-            withAnimation(.spring(response: 0.7, dampingFraction: 0.9)) {
-                showSpade = true
-            }
+            acePulse = 1.0 // keep minimal pulsing or remove
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
             withAnimation(.spring(response: 0.6, dampingFraction: 0.9)) {
@@ -345,6 +348,18 @@ struct MainMenuView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.70) {
             withAnimation(.easeOut(duration: 0.5)) {
                 showAttribution = true
+            }
+        }
+        // Show the `Blackjack` title last with its entrance animation
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.95) {
+            withAnimation(.interpolatingSpring(stiffness: 220, damping: 18)) {
+                showBlackjack = true
+            }
+            // start subtle repeating zoom/pulse after entrance completes
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.35) {
+                withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
+                    blackjackPulse = true
+                }
             }
         }
     }

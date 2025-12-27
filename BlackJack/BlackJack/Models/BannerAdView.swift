@@ -1,16 +1,16 @@
 import SwiftUI
-import GoogleMobileAds
 
-struct BannerAdView: UIViewRepresentable {
-    func makeUIView(context: Context) -> BannerView {
-        let banner = BannerView(adSize: AdSizeBanner)
-            banner.adUnitID = "ca-app-pub-4504051516226977/4227135830" // Production Banner Ad Unit ID
-        if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-           let rootVC = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController {
-            banner.rootViewController = rootVC
-        }
-        banner.load(Request())
-        return banner
+struct BannerAdView: View {
+    var body: some View {
+        // Ads removed; placeholder view takes no space
+        Color.clear.frame(height: 0)
     }
-    func updateUIView(_ uiView: BannerView, context: Context) {}
+}
+
+#Preview {
+    VStack(spacing: 12) {
+        Text("Content Above Ad")
+        BannerAdView().frame(height: 0)
+        Text("Content Below Ad")
+    }
 }

@@ -1,0 +1,4 @@
+
+// Removed CocoaPods-generated xcconfig. CocoaPods removed from project.
+GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
+
