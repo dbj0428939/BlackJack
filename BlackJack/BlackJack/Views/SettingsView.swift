@@ -133,6 +133,15 @@ struct SettingsView: View {
                                             .foregroundColor(.white.opacity(0.6))
                                         Spacer()
                                     }
+                                    HStack {
+                                        Image(systemName: "doc.text")
+                                            .font(.caption)
+                                            .foregroundColor(.white.opacity(0.6))
+                                        Link("Privacy Policy", destination: URL(string: "https://sites.google.com/view/spadebet-privacy-policy/")!)
+                                            .font(.caption)
+                                            .foregroundColor(.white.opacity(0.6))
+                                        Spacer()
+                                    }
                                 }
                             }
                         }
