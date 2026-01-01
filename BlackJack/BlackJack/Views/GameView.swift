@@ -275,6 +275,7 @@ struct GameView: View {
     @State private var chipRotation: Double = 0.0 // Chip rotation animation
     @State private var chipOpacity: Double = 1.0 // Chip opacity animation
     @State private var showGameOverButtons = false // Control game over buttons visibility
+    @State private var hasAppearedOnce = false
     let handIconSize: CGFloat = 44
     let standCircleSize: CGFloat = 44
     let standCircleOffset: CGFloat = 70
@@ -706,9 +707,14 @@ struct GameView: View {
             }
         }
         .onAppear {
+            // Only perform the heavy reset on the first appearance of this view instance.
+            // This prevents returning from a presented interstitial from wiping out end-of-game UI.
+            guard !hasAppearedOnce else { return }
+            hasAppearedOnce = true
+
             // Initialize animatedBalance to current balance when view appears
             animatedBalance = gameState.balance
-            
+
             // Reset UI state when returning to the game (for both new games and continuing games)
             // Reset positioning states to ensure proper layout
             dealerDrawingOffset = 0
@@ -719,7 +725,7 @@ struct GameView: View {
             isDealingCards = false
             dealerPeeking = false
             dealerHoleCardFlipped = false
-            
+
             // Reset card animation states
             playerDealtCount = 0
             dealerDealtCount = 0
@@ -727,7 +733,7 @@ struct GameView: View {
             playerCardRotation = [90, 90]
             dealerCardFlyIn = [false, false]
             dealerCardRotation = [90, 90]
-            
+
             // If continuing a game in progress, set proper card counts
             if !game.playerHand.cards.isEmpty && !game.dealerHand.cards.isEmpty {
                 playerDealtCount = game.playerHand.cards.count
@@ -749,7 +755,7 @@ struct GameView: View {
             } else {
                 dealt = false  // Set dealt to false for new games
             }
-            
+
             // Reset split states
             isSplitTransitioning = false
             splitTransitionProgress = 0.0
@@ -765,13 +771,13 @@ struct GameView: View {
             splitChipPositions.removeAll()
             splitHandMessages.removeAll()
             splitMessageTimers.removeAll()
-            
+
             // Reset insurance states
             showInsuranceMessage = true
             showInsuranceChip = false
             insuranceChipPosition = CGPoint(x: 0, y: 0)
             insuranceChipScale = 1.0
-            
+
             // Reset chip animation states
             showChipInCircle = true
             chipAnimationOffset = .zero
@@ -780,7 +786,7 @@ struct GameView: View {
             chipOpacity = 1.0
             chipAnimations.removeAll()
             animatingChips.removeAll()
-            
+
             // Reset other UI states
             showBustMessage = false
             bustMessage = ""
@@ -816,7 +822,7 @@ struct GameView: View {
             showInsuranceChip = false
             showChipInCircle = true
             showGameOverButtons = false
-            
+
             // Force layout refresh to ensure proper positioning
             DispatchQueue.main.async {
                 self.uiRefreshTrigger.toggle()
@@ -4389,6 +4395,7 @@ struct EnhancedAddFundsView: View {
     @State private var adRewardAmount = 50
     @State private var showPurchaseSuccess = false
     @State private var purchaseSuccessMessage = ""
+    @StateObject var rewardedAdManager = RewardedAdManager.shared
     
     enum AddFundsOption: CaseIterable {
         case watchAd
@@ -4413,7 +4420,7 @@ struct EnhancedAddFundsView: View {
         
         var description: String {
             switch self {
-            case .watchAd: return "To watch another ad, exit the app and return here"
+            case .watchAd: return ""
             case .purchase5000: return "5,000 chips"
             case .purchase30000: return "30,000 chips"
             case .purchase200000: return "200,000 chips"
@@ -4612,6 +4619,11 @@ struct EnhancedAddFundsView: View {
                 }
             }
         }
+        .onAppear {
+            // Load simulated rewarded ad with test unit ID
+            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+        }
+        
         .alert("Success!", isPresented: $showPurchaseSuccess) {
             Button("OK") { }
         } message: {
@@ -4657,10 +4669,21 @@ struct EnhancedAddFundsView: View {
     }
     
     private func watchAdForChips() {
-        // Ads removed: show a friendly fallback message instead of playing ads
-        purchaseSuccessMessage = "Ad-based rewards are disabled in this build."
-        showPurchaseSuccess = true
-        isWatchingAd = false
+        // Try to show rewarded ad and award chips on completion
+        let played = rewardedAdManager.showRewardedAd {
+            DispatchQueue.main.async {
+                gameState.addFunds(Double(adRewardAmount))
+                purchaseSuccessMessage = "You received \(adRewardAmount) chips!"
+                showPurchaseSuccess = true
+            }
+        }
+
+        if !played {
+            // If ad not ready, (re)load and inform the user
+            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+            purchaseSuccessMessage = "Ad is loading — try again in a moment."
+            showPurchaseSuccess = true
+        }
     }
 // ...existing code...
 
@@ -4726,12 +4749,7 @@ struct AddFundsOptionView: View {
 
     private var adStatusView: some View {
         Group {
-            if option == .watchAd {
-                Text("Disabled")
-                    .font(.caption)
-                    .foregroundColor(.white)
-                    .padding(.leading, 8)
-            }
+            EmptyView()
         }
     }
     

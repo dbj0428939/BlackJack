@@ -551,6 +551,9 @@ class BlackjackGame: ObservableObject {
             splitManager.completeAllHands()
             gameState = .gameOver
             
+            // Interstitial: count completed hands and maybe show an ad after all split hands resolved
+            InterstitialAdManager.shared.recordHandCompletedAndMaybeShow()
+            
             // Removed: Do not show rewarded ad automatically after split game ends
             return
         }
@@ -798,6 +801,9 @@ class BlackjackGame: ObservableObject {
         }
         
         gameState = .gameOver
+        
+        // Interstitial: count completed hands and maybe show an ad
+        InterstitialAdManager.shared.recordHandCompletedAndMaybeShow()
         
         // Removed: Do not show rewarded ad automatically after game ends
     }

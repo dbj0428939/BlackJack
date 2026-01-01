@@ -201,21 +201,27 @@ struct MainMenuView: View {
                                 icon: "play.fill",
                                 isEnabled: gameState.balance > 0,
                                 action: {
-                                    if gameState.balance > 0 {
-                                        SoundManager.shared.playButtonTap()
-                                        // Interstitials disabled
-                                        
+                                    guard gameState.balance > 0 else { return }
+                                    SoundManager.shared.playButtonTap()
+
+                                    // Show the one-time first-game interstitial (if applicable) and only
+                                    // proceed into the game after the ad completes (or immediately if none).
+                                    // During DEBUG builds, force the flag to false so the ad reliably shows for testing.
+                                    #if DEBUG
+                                    UserDefaults.standard.set(false, forKey: "interstitialShownOnFirstGameStart")
+                                    #endif
+                                    InterstitialAdManager.shared.showOnFirstGameStartIfNeeded {
                                         // Animate a quick branded transition before presenting the game
                                         showPlayTransition = true
                                         playZoom = false
-                                        
+
                                         // Kick off zoom animation
                                         DispatchQueue.main.async {
                                             withAnimation(.easeInOut(duration: 0.65)) {
                                                 playZoom = true
                                             }
                                         }
-                                        
+
                                         // Present game after the transition completes
                                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.68) {
                                             showingGame = true
@@ -313,7 +319,8 @@ struct MainMenuView: View {
                 .environmentObject(storeManager)
         }
         .fullScreenCover(isPresented: $showingGame) {
-            GameView(game: game, initialBetAmount: betAmount).environmentObject(gameState)
+            GameView(game: game, initialBetAmount: betAmount)
+                .environmentObject(gameState)
         }
         .fullScreenCover(isPresented: $showingStats) {
             StatsView()
@@ -323,7 +330,10 @@ struct MainMenuView: View {
         }
         .onAppear {
             startLoadingAnimation()
+            // Preload interstitials at app start
+            InterstitialAdManager.shared.load()
         }
+        
     }
     
     private func startLoadingAnimation() {

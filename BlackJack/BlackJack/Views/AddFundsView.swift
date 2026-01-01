@@ -4,7 +4,12 @@ struct AddFundsView: View {
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var gameState: GameState
     @StateObject var iapManager = InAppPurchaseManager()
+    @StateObject var rewardedAdManager = RewardedAdManager.shared
     @State private var animateFloating = false
+    @State private var displayBalance: Double = 0
+    @State private var lastBalance: Double = 0
+    @State private var showAwardToast: Bool = false
+    @State private var awardAmount: Int = 0
 
     var body: some View {
         NavigationView {
@@ -30,9 +35,16 @@ struct AddFundsView: View {
                         )
                 }
                 VStack(spacing: 20) {
-                    Text("Add Funds")
-                        .font(.title)
-                        .foregroundColor(.white)
+                    // Current balance header with animated value
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Current Balance:")
+                            .font(.subheadline)
+                            .foregroundColor(.white.opacity(0.8))
+                        Text("$\(Int(displayBalance))")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.yellow)
+                    }
 
                     if iapManager.isLoading {
                         ProgressView()
@@ -66,6 +78,47 @@ struct AddFundsView: View {
                             .padding(.horizontal)
                         }
                     }
+                    // Watch ad for chips
+                    VStack {
+                        Button(action: {
+                            SoundManager.shared.playChipPlace()
+                            let played = rewardedAdManager.showRewardedAd {
+                                // Award 50 chips when ad completes
+                                    DispatchQueue.main.async {
+                                        let amount = 50
+                                        gameState.addFunds(Double(amount))
+                                        // local UI feedback
+                                        awardAmount = amount
+                                        showAwardToast = true
+                                        lastBalance = displayBalance
+                                        // Animate numeric increase
+                                        Task {
+                                            await animateBalanceIncrease(from: lastBalance, to: gameState.balance)
+                                        }
+                                        // hide toast after 1.8s
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                                            showAwardToast = false
+                                        }
+                                    }
+                            }
+                            if !played {
+                                // If ad not ready, attempt to (re)load with the provided test unit ID
+                                rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+                            }
+                        }) {
+                            HStack {
+                                Spacer()
+                                Text(rewardedAdManager.isRewardedAdReady ? "Watch Ad for 50 Chips" : "Loading Ad...")
+                                    .foregroundColor(.black)
+                                    .padding(.vertical, 10)
+                                Spacer()
+                            }
+                            .background(Color.yellow)
+                            .cornerRadius(10)
+                            .padding(.horizontal)
+                        }
+                        .disabled(!rewardedAdManager.isRewardedAdReady)
+                    }
                 }
             }
             .navigationBarItems(trailing: Button("Close") {
@@ -78,6 +131,71 @@ struct AddFundsView: View {
             Task {
                 await iapManager.loadProducts()
             }
+            // Start loading the simulated rewarded ad with provided test unit ID
+            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+            // initialize displayed balance
+            displayBalance = gameState.balance
+            lastBalance = gameState.balance
         }
+        .onChange(of: gameState.balance) { oldValue, newValue in
+            // If balance increased (award), animate the numeric change and show toast
+            if newValue > lastBalance {
+                awardAmount = Int(newValue - lastBalance)
+                showAwardToast = true
+                Task {
+                    await animateBalanceIncrease(from: lastBalance, to: newValue)
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1.8) {
+                    showAwardToast = false
+                }
+                lastBalance = newValue
+            } else {
+                // update without animation for non-incremental changes
+                displayBalance = newValue
+                lastBalance = newValue
+            }
+        }
+
+        // Toast overlay when award is received
+        .overlay(
+            Group {
+                if showAwardToast {
+                    VStack {
+                        Spacer()
+                        HStack {
+                            Spacer()
+                            Text("+\(awardAmount) chips — Added!")
+                                .padding(.horizontal, 18)
+                                .padding(.vertical, 10)
+                                .background(Color.black.opacity(0.85))
+                                .foregroundColor(.white)
+                                .cornerRadius(12)
+                            Spacer()
+                        }
+                        .padding(.bottom, 40)
+                    }
+                    .transition(.move(edge: .bottom).combined(with: .opacity))
+                    .animation(.easeOut(duration: 0.35), value: showAwardToast)
+                }
+            }
+        )
+        
     }
+
+    // Animate displayed balance from `from` to `to` over ~0.6s
+    private func animateBalanceIncrease(from: Double, to: Double) async {
+        let steps = 20
+        let total: Double = to - from
+        guard total > 0 else {
+            await MainActor.run { displayBalance = to }
+            return
+        }
+        for i in 1...steps {
+            let progress = Double(i) / Double(steps)
+            let value = from + total * progress
+            await MainActor.run { displayBalance = value }
+            try? await Task.sleep(nanoseconds: 20_000_000) // 20ms
+        }
+        await MainActor.run { displayBalance = to }
 }
+    }
