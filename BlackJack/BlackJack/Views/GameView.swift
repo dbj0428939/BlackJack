@@ -4621,7 +4621,7 @@ struct EnhancedAddFundsView: View {
         }
         .onAppear {
             // Load simulated rewarded ad with test unit ID
-            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-4504051516226977/8991489305")
         }
         
         .alert("Success!", isPresented: $showPurchaseSuccess) {
@@ -4680,7 +4680,7 @@ struct EnhancedAddFundsView: View {
 
         if !played {
             // If ad not ready, (re)load and inform the user
-            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-4504051516226977/8991489305")
             purchaseSuccessMessage = "Ad is loading — try again in a moment."
             showPurchaseSuccess = true
         }

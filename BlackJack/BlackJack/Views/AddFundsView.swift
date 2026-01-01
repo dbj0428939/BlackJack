@@ -103,7 +103,7 @@ struct AddFundsView: View {
                             }
                             if !played {
                                 // If ad not ready, attempt to (re)load with the provided test unit ID
-                                rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+                                rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-4504051516226977/8991489305")
                             }
                         }) {
                             HStack {
@@ -132,7 +132,7 @@ struct AddFundsView: View {
                 await iapManager.loadProducts()
             }
             // Start loading the simulated rewarded ad with provided test unit ID
-            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-3940256099942544/1712485313")
+            rewardedAdManager.loadRewardedAd(testUnitID: "ca-app-pub-4504051516226977/8991489305")
             // initialize displayed balance
             displayBalance = gameState.balance
             lastBalance = gameState.balance

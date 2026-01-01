@@ -4,7 +4,7 @@ import GoogleMobileAds
 struct GADBannerAdView: UIViewRepresentable {
     // Google provides official test ad unit IDs. Use these in development to avoid policy violations
     // and to ensure predictable behavior. Replace with your real unit ID only for production builds.
-    let adUnitID: String = "ca-app-pub-3940256099942544/2934735716"
+    let adUnitID: String = "ca-app-pub-4504051516226977/4227135830"
     
     // The available width drives the adaptive banner size. Adaptive banners choose a height automatically
     // that fits the current device and orientation for the given width, maximizing performance and fill.

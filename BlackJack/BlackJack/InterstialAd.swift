@@ -19,7 +19,7 @@ final class InterstitialAdManager: NSObject, ObservableObject, FullScreenContent
 
     // Use Google's official test interstitial unit ID during development. Replace with your real unit ID for production.
     /// Google test interstitial ad unit
-    private let adUnitID = "ca-app-pub-3940256099942544/4411468910"
+    private let adUnitID = "ca-app-pub-4504051516226977/8440598650"
 
     // Keep a strong reference to the loaded interstitial until it's shown or fails.
     private var interstitial: InterstitialAd?
